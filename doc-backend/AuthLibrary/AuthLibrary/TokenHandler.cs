@@ -1,6 +1,4 @@
 ﻿using System;
-using DocAnalyzerDataHandler;
-using DocAnalyzerDataHandler.Repository;
 
 namespace AuthLibrary
 {
@@ -26,11 +24,6 @@ namespace AuthLibrary
             return encryptedToken;
         }
 
-        private static string DecryptToken(string encryptedToken)
-        {
-            return EncryptRijndael.DecryptAes256(encryptedToken);
-        }
-
         /**
          * This method validates the token, if is valid the user's email and password is returned
          * return: if the return value is null, is because the token was invalid,
@@ -41,7 +34,7 @@ namespace AuthLibrary
         {
             try
             {
-                string decryptedToken = DecryptToken(token);
+                string decryptedToken = EncryptRijndael.DecryptAes256(token);
                 string[] userData = decryptedToken.Split(tokenSeparator);
 
                 // Check if the token has the 3 components (email, password and expiration date)
