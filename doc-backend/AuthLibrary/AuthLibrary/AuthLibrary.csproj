@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DocAnalyzerDataHandler" Version="1.0.0" />
+    <PackageReference Include="Rijndael256" Version="3.2.0" />
+  </ItemGroup>
+
 </Project>

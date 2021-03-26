@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthLibrary", "AuthLibrary\AuthLibrary.csproj", "{30C59926-355A-43E8-AD9E-A819F8B95F60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{CA969AD1-FD36-4208-B01D-C3C651E10A0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{CA969AD1-FD36-4208-B01D-C3C651E10A0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthUnitTest", "AuthUnitTest\AuthUnitTest.csproj", "{CA324E33-5E60-445F-A70A-9E282380C467}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthUnitTest", "AuthUnitTest\AuthUnitTest.csproj", "{629B362E-0589-4B6D-AC14-972FA50072FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{CA969AD1-FD36-4208-B01D-C3C651E10A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA969AD1-FD36-4208-B01D-C3C651E10A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA969AD1-FD36-4208-B01D-C3C651E10A0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA324E33-5E60-445F-A70A-9E282380C467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA324E33-5E60-445F-A70A-9E282380C467}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA324E33-5E60-445F-A70A-9E282380C467}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA324E33-5E60-445F-A70A-9E282380C467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629B362E-0589-4B6D-AC14-972FA50072FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629B362E-0589-4B6D-AC14-972FA50072FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629B362E-0589-4B6D-AC14-972FA50072FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629B362E-0589-4B6D-AC14-972FA50072FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
