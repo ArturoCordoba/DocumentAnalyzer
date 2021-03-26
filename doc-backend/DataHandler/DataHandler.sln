@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocAnalyzerDataHandler", "DocAnalyzerDataHandler\DocAnalyzerDataHandler.csproj", "{4C72301A-B426-487A-B166-D7BC434B0867}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocAnalyzerDataHandlerUnitTest", "DocAnalyzerDataHandlerUnitTest\DocAnalyzerDataHandlerUnitTest.csproj", "{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C72301A-B426-487A-B166-D7BC434B0867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C72301A-B426-487A-B166-D7BC434B0867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C72301A-B426-487A-B166-D7BC434B0867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C72301A-B426-487A-B166-D7BC434B0867}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {876B2BB8-CFD5-405E-8FC3-0EBC12FEBB59}
+	EndGlobalSection
+EndGlobal
