@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="DocAnalyzerDataHandler" Version="1.0.0" />
-    <PackageReference Include="Rijndael256" Version="3.2.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.9.0" />
   </ItemGroup>
 
 </Project>
