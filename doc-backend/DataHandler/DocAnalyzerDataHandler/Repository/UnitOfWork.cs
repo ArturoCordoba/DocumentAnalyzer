@@ -1,32 +1,46 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections;
+using Microsoft.EntityFrameworkCore;
 
 namespace DocAnalyzerDataHandler.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private DocAnalyzerContext _dbContext;
-        private BaseRepository<Employee> _employees;
-        private BaseRepository<Usercredential> _usercredentials;
+        private DbContext _dbContext;
+        private Hashtable _repositories;
 
-        public UnitOfWork(DocAnalyzerContext dbContext)
+        public UnitOfWork(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IRepository<Employee> Employees
+        /// <summary>
+        /// Method that returns the repository of an specific TEntity
+        /// </summary>
+        /// <typeparam name="TEntity">Database entity</typeparam>
+        /// <returns>Repository of the TEntity</returns>
+        public IRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
-            get
-            {
-                return _employees ?? (_employees = new BaseRepository<Employee>(_dbContext));
-            }
-        }
+            // Creation of the Hashtable if it doesnt exist
+            if (_repositories == null)
+                _repositories = new Hashtable();
 
-        public IRepository<Usercredential> Usercredentials
-        {
-            get
-            {
-                return _usercredentials ?? (_usercredentials = new BaseRepository<Usercredential>(_dbContext));
-            }
+            // Get the type of the Entity
+            var type = typeof(TEntity).Name;
+
+            // If the Repository is created, it is returned
+            if (_repositories.ContainsKey(type)) return (IRepository<TEntity>)_repositories[type];
+
+            // Creation of the repository
+            var repositoryType = typeof(BaseRepository<>); // Type of repository
+            var repositoryInstance =
+                Activator.CreateInstance(repositoryType
+                    .MakeGenericType(typeof(TEntity)), _dbContext);
+
+            // The new repository is added to the Hashtable
+            _repositories.Add(type, repositoryInstance);
+
+            return (IRepository<TEntity>)_repositories[type];
         }
 
         public void Commit()

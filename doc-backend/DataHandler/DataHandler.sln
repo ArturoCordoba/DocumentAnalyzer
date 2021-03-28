@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocAnalyzerDataHandler", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocAnalyzerDataHandlerUnitTest", "DocAnalyzerDataHandlerUnitTest\DocAnalyzerDataHandlerUnitTest.csproj", "{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{D92C1634-F59F-48FB-8E03-026FF2603DCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBD2A105-451B-4370-93F5-E2A4DD4BD4A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D92C1634-F59F-48FB-8E03-026FF2603DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D92C1634-F59F-48FB-8E03-026FF2603DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D92C1634-F59F-48FB-8E03-026FF2603DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D92C1634-F59F-48FB-8E03-026FF2603DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
