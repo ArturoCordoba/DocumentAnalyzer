@@ -2,7 +2,7 @@
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 
-namespace DocAnalyzerDataHandler.Repository
+namespace DataHandlerSQL.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {

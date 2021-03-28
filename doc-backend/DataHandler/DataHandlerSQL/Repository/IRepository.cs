@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace DocAnalyzerDataHandler.Repository
+namespace DataHandlerSQL.Repository
 {
     public interface IRepository<TEntity> where TEntity : class 
     {

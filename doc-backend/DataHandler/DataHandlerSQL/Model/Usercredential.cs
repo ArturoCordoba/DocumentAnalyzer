@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
 
-namespace DocAnalyzerDataHandler
+namespace DataHandlerSQL
 {
     [Table("usercredential")]
     [IndexAttribute(nameof(Email), Name = "usercredential_email_key", IsUnique = true)]

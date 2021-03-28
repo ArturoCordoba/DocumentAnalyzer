@@ -1,4 +1,4 @@
-﻿namespace DocAnalyzerDataHandler.Repository
+﻿namespace DataHandlerSQL.Repository
 {
     public interface IUnitOfWork
     {

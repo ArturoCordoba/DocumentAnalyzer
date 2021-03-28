@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore; 
 
-namespace DocAnalyzerDataHandler.Repository
+namespace DataHandlerSQL.Repository
 {
     class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {

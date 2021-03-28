@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DocAnalyzerDataHandler\DocAnalyzerDataHandler.csproj" />
+    <ProjectReference Include="..\DataHandlerSQL\DataHandlerSQL.csproj" />
   </ItemGroup>
 
 </Project>

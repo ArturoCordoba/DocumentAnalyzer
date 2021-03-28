@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace DocAnalyzerDataHandler
+namespace DataHandlerSQL
 {
     public partial class DocAnalyzerContext : DbContext
     {

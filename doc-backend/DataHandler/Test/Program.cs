@@ -1,6 +1,6 @@
 ﻿using System;
-using DocAnalyzerDataHandler.Repository;
-using DocAnalyzerDataHandler;
+using DataHandlerSQL.Repository;
+using DataHandlerSQL;
 using System.Collections.Generic;
 using System.Linq;
 

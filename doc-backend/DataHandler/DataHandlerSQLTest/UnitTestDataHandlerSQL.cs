@@ -1,15 +1,15 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DocAnalyzerDataHandler.Repository;
-using DocAnalyzerDataHandler;
+using DataHandlerSQL;
+using DataHandlerSQL.Repository;
 using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace DocAnalyzerDataHandlerUnitTest
+namespace DataHandlerSQLTest
 {
     [TestClass]
-    public class UnitTestDocAnalyzerContext
+    public class UnitTestDataHandlerSQL
     {
         private IUnitOfWork unitOfWork;
         IRepository<Employee> repository;
@@ -25,7 +25,7 @@ namespace DocAnalyzerDataHandlerUnitTest
 
             repository = unitOfWork.Repository<Employee>();
         }
-        
+
         [TestMethod]
         public void TestInsert()
         {
