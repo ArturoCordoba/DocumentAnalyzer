@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace DocAnalyzerDataHandler
+namespace DataHandlerSQL
 {
     [Table("employee")]
     public partial class Employee

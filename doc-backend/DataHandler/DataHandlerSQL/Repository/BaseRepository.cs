@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; 
 
-namespace DocAnalyzerDataHandler.Repository
+namespace DataHandlerSQL.Repository
 {
     class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private DocAnalyzerContext context;
+        private DbContext context;
         private DbSet<TEntity> dbSet;
 
-        public BaseRepository(DocAnalyzerContext context)
+        public BaseRepository(DbContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();
@@ -26,7 +26,6 @@ namespace DocAnalyzerDataHandler.Repository
         public virtual void Update(TEntity entity)
         {
             dbSet.Attach(entity);
-            context.Entry(entity).State = EntityState.Modified;
         }
 
         public virtual TEntity GetById(object id)
@@ -34,31 +33,22 @@ namespace DocAnalyzerDataHandler.Repository
             return dbSet.Find(id);
         }
 
+        /// <summary>
+        /// Method to get all the rows of an specific Entity, they can be filtered and sorted
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="orderBy"></param>
+        /// <returns></returns>
         public virtual IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "")
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             IQueryable<TEntity> query = dbSet;
 
             if (filter != null) query = query.Where(filter);
 
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-
             if (orderBy != null) return orderBy(query).ToList();
             else return query.ToList();
-        }
-
-        public virtual IEnumerable<TEntity> GetWithQuery(string query, params object[] parameters)
-        {
-            return dbSet.FromSqlRaw(query, parameters).ToList();
         }
 
         public virtual void Delete(object id)
@@ -69,10 +59,7 @@ namespace DocAnalyzerDataHandler.Repository
 
         public virtual void Delete(TEntity entity)
         {
-            if(context.Entry(entity).State == EntityState.Detached)
-            {
-                dbSet.Attach(entity);
-            }
+            dbSet.Attach(entity);    
             dbSet.Remove(entity);
         }
     }
