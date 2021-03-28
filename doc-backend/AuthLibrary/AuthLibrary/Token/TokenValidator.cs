@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace AuthLibrary
+namespace AuthLibrary.Token
 {
     class TokenValidator : ITokenValidator
     {

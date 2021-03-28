@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthLibrary
+namespace AuthLibrary.Token
 {
-    public interface IAuthenticationService
+    public interface ITokenGenerator
     {
-        public string Authenticate(string email, string password);
-
+        public string GenerateToken(string email);
     }
 }

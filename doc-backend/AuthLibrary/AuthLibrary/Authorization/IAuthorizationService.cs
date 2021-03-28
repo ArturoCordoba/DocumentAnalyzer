@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthLibrary
+namespace AuthLibrary.Authorization
 {
-    public interface ITokenValidator
+    public interface IAuthorizationService
     {
-        public bool VerifyToken(string token);
+        public bool Authorize(string token);
+
     }
 }

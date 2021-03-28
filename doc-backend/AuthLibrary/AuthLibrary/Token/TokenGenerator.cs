@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AuthLibrary
+namespace AuthLibrary.Token
 {
     class TokenGenerator : ITokenGenerator
     {
