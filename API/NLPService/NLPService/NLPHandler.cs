@@ -28,6 +28,7 @@ namespace NLPService
             return text.ToString();
         }
 
+        /*
         public static string GetTextFromWord(string path)
         {
             Document doc = new Document();
@@ -35,6 +36,7 @@ namespace NLPService
             string text = doc.GetText();
             return text;
         }
+        */
 
         public static string GetTextFromTxt(string path)
         {
@@ -96,7 +98,7 @@ namespace NLPService
             //Console.WriteLine(blob_type);
             if (blob_type.Equals("application/pdf"))
             {
-                string fileName = @"C:\Users\fagon\source\repos\TestNPL\TestNPL\file.pdf";
+                string fileName = @"C:\Users\laura\OneDrive\Documents\Fabian TEC\file.pdf";
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
@@ -110,7 +112,7 @@ namespace NLPService
             }
             else if (blob_type.Equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
             {
-                string fileName = @"C:\Users\fagon\source\repos\TestNPL\TestNPL\file.docx";
+                string fileName = @"C:\Users\laura\OneDrive\Documents\Fabian TEC\file.docx";
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
@@ -119,12 +121,12 @@ namespace NLPService
                 {
                     download.Value.Content.CopyTo(file);
                 }
-                var text = GetTextFromWord(fileName);
-                entities = EntityRecognition(nlp_client, text);
+                //var text = GetTextFromWord(fileName);
+                //entities = EntityRecognition(nlp_client, text);
             }
             else if (blob_type.Equals("text/plain"))
             {
-                string fileName = @"C:\Users\fagon\source\repos\TestNPL\TestNPL\file.txt";
+                string fileName = @"C:\Users\laura\OneDrive\Documents\Fabian TEC\file.txt";
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
