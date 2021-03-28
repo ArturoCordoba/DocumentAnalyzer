@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace AuthLibrary
 {
-    public interface IAuthService
+    public interface IAuthenticationService
     {
-        public ITokenGenerator TokenGenerator { get; }
+        public string Authenticate(string email, string password, string correctEmail, string correctPassword);
 
-        public ITokenValidator TokenValidator { get; }
     }
 }

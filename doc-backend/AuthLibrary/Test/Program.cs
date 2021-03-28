@@ -3,29 +3,30 @@ using AuthLibrary;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
+using AuthLibrary.Configuration;
+using AuthLibrary.Factory;
+
 namespace Test
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string email = "test@email.com";
 
-            string secreyKey = "clave ultra secreta";
-            string issuerToken = "auth api";
-            int expirationTime = 1;
+            AuthServiceConfig.Config.SecretKey = "shfvoilf4ltf645sf4%";
+            AuthServiceConfig.Config.IssuerToken = "Test Issuer";
+            AuthServiceConfig.Config.ExpirationTime = 1;
 
-            IAuthService authService = AuthServiceFactory.GetAuthService(secreyKey, issuerToken, expirationTime);
+            IAuthServiceFactory authFactory = new AuthServiceFactory();
 
-            string token = authService.TokenGenerator.GenerateToken(email);
+            string email = "test@email.company.com";
+            string correctEmail = "test@email.company.com";
+            string password = "fsifjosf";
+            string correctPassword = "fsifjosf";
 
-            string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZW1haWwuY29tIiwibmJmIjoxNjE2ODE4MTgzLCJleHAiOjE2MTY4MTgyNDMsImlhdCI6MTYxNjgxODE4MywiaXNzIjoiYXV0aCBhcGkifQ.OVsjMFeghd2mA44esltTS6c5zVpMd_8X6hbKmFUnKIQ";
+            string token = authFactory.Authentication.Authenticate(email, password, correctEmail, correctPassword);
 
             Console.WriteLine(token);
-            bool validToken = authService.TokenValidator.VerifyToken(token);
-
-
-            Console.WriteLine(validToken);
         }
     }
 }
