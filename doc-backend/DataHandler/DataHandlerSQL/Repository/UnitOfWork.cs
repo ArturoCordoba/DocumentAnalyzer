@@ -19,7 +19,7 @@ namespace DataHandlerSQL.Repository
         /// </summary>
         /// <typeparam name="TEntity">Database entity</typeparam>
         /// <returns>Repository of the TEntity</returns>
-        public IRepository<TEntity> Repository<TEntity>() where TEntity : class
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
         {
             // Creation of the Hashtable if it doesnt exist
             if (_repositories == null)

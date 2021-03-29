@@ -23,7 +23,7 @@ namespace DataHandlerSQLTest
 
             unitOfWork = new UnitOfWork(dbContext);
 
-            repository = unitOfWork.Repository<Employee>();
+            repository = unitOfWork.GetRepository<Employee>();
         }
 
         [TestMethod]
