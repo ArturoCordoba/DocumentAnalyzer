@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace NLPService
@@ -20,15 +22,34 @@ namespace NLPService
             Queue<Blob> doc_queue = new Queue<Blob>();
             doc_queue.Enqueue(blob);
 
-            // Obtain the blob text
-            string text = DataHandler.GetBlobText(blob_url);
+            // Download the blob file
+            string blob_file = DataHandler.GetBlobText(blob.Url);
+            // Obtain the blob file text
+            string text = FileHandler.GetBlobText(blob_file);
+            
+            List<Employee> employees = new List<Employee>();
             // Obtain the text references/entities
-            blob_references = NLPClient.EntityRecognition(text);
-            blob.References = blob_references;
+            employees = NLPClient.EntityRecognition(text);
 
-            for (int i = 0; i < blob.References.Count; i++)
-                Console.WriteLine(blob.References[i]); ;
-        
+            List<string> references = new List<string>();
+           
+            foreach (Employee employee in employees)
+            {
+                string json_employee = JsonSerializer.Serialize(employee);
+                references.Add(json_employee);
+                Console.WriteLine(json_employee);
+            }
+            blob.References = references;
+            /*
+            for (int i = 0; i < employees.Count; i++)
+                Console.WriteLine(employees[i].Name + " " + employees[i].Quantity); ;
+            */
+            // Set true the status of the nlp
+            blob.Status = true;
+
+            string jsonString = JsonSerializer.Serialize(blob);
+            Console.WriteLine(jsonString);
+
         }
     }
 }

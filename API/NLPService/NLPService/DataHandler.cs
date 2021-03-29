@@ -33,59 +33,53 @@ namespace NLPService
             // Obtain the blob content type
             string blob_type = GetBlobType(blob);
 
-            // Obtain the text of a pdf file
+            // Creates a pdf file with blob info
             if (blob_type.Equals("application/pdf"))
             {   
-                // Create a temporary pdf file
-                string fileName = AppDomain.CurrentDomain.BaseDirectory + @"\file.pdf";
-                if (File.Exists(fileName))
+                // Creates temporary pdf file
+                string file_path = AppDomain.CurrentDomain.BaseDirectory + @"\file.pdf";
+                if (File.Exists(file_path))
                 {
-                    File.Delete(fileName);
+                    File.Delete(file_path);
                 }
                 // Copy the downloaded blob info to the file
-                using (FileStream file = File.OpenWrite(fileName))
+                using (FileStream file = File.OpenWrite(file_path))
                 {
                     download.Value.Content.CopyTo(file);
                 }
-                // Obtain the text from the pdf file
-                string text = FileHandler.GetTextFromPDF(fileName);
-                return text;
+                return file_path;
             }
-            // Obtain the text of a word file
+            // Creates a word file with blob info
             else if (blob_type.Equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
             {   
                 // Create a temporary word file
-                string fileName = AppDomain.CurrentDomain.BaseDirectory + @"\file.docx";
-                if (File.Exists(fileName))
+                string file_path = AppDomain.CurrentDomain.BaseDirectory + @"\file.docx";
+                if (File.Exists(file_path))
                 {
-                    File.Delete(fileName);
+                    File.Delete(file_path);
                 }
                 // Copy the downloaded blob info to the file
-                using (FileStream file = File.OpenWrite(fileName))
+                using (FileStream file = File.OpenWrite(file_path))
                 {
                     download.Value.Content.CopyTo(file);
                 }
-                // Obtain the text from the word file
-                string text = FileHandler.GetTextFromWord(fileName);
-                return text;
+                return file_path;
             }
-            // Obtain the text of a txt file
+            // Creates a plain text file with the blob info
             else if (blob_type.Equals("text/plain"))
             {
                 // Create a temporary plain text file
-                string fileName = AppDomain.CurrentDomain.BaseDirectory + @"\file.txt";
-                if (File.Exists(fileName))
+                string file_path = AppDomain.CurrentDomain.BaseDirectory + @"\file.txt";
+                if (File.Exists(file_path))
                 {
-                    File.Delete(fileName);
+                    File.Delete(file_path);
                 }
                 // Copy the downloaded blob info to the file
-                using (FileStream file = File.OpenWrite(fileName))
+                using (FileStream file = File.OpenWrite(file_path))
                 {
                     download.Value.Content.CopyTo(file);
                 }
-                // Obtain the text from the plain text file
-                string text = FileHandler.GetTextFromTxt(fileName);
-                return text;
+                return file_path;
             }
             else
             {   

@@ -11,19 +11,30 @@ namespace NLPService
         // Set the endpoint of the client
         private static readonly Uri endpoint = new Uri("https://soa-nlp-api.cognitiveservices.azure.com/");
 
-        public static List<string> EntityRecognition(string document)
+        public static List<Employee> EntityRecognition(string document)
         {
-            //Create a client of the NLP API
+            // Creates a client of the NLP API
             var nlp_client = new TextAnalyticsClient(endpoint, credentials);
-
-            List<string> entities = new List<string>();
+            // Creates a list of Employee objects to store the recognized entities
+            List<Employee> entities = new List<Employee>();
+            // Obtain the recognized entities in a response
             var response = nlp_client.RecognizeEntities(document);
+            // Adds the obtained entities into the list
             Console.WriteLine("Named Entities:");
             foreach (var entity in response.Value)
             {
                 if (entity.Category == "Person")
                 {
-                    entities.Add(entity.Text);
+                    string name = entity.Text;
+                    if (entities.Exists(person => person.Name == entity.Text)) 
+                    {
+                        var employee = entities.Find(person => person.Name == entity.Text);
+                        employee.Quantity += 1;
+                    }
+                    else
+                    {
+                        entities.Add(new Employee(entity.Text, 1));
+                    }
                 }
             }
             return entities;
