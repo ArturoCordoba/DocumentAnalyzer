@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace AuthAPI.Controllers
 {
     [ApiController]
@@ -24,7 +26,23 @@ namespace AuthAPI.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public IEnumerable<WeatherForecast> Get()
+        {
+            var rng = new Random();
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
+
+        [Route("1")]
+        [HttpGet]
+        [Authorize]
+        public IEnumerable<WeatherForecast> GetX()
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
