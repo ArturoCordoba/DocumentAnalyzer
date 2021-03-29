@@ -13,7 +13,7 @@ namespace NLPService
             // Obtain the blob title
             string blob_title = blob_url.Replace("https://soafiles.blob.core.windows.net/files/", "");
             // Create an empty list of references
-            List<string> blob_references = new List<string>();
+            List<Employee> blob_references = new List<Employee>();
             // Create a new Document object with the metadata
             var blob = new Blob(blob_title, blob_url, blob_references, blob_owner, false);
 
@@ -26,24 +26,15 @@ namespace NLPService
             string blob_file = DataHandler.GetBlobText(blob.Url);
             // Obtain the blob file text
             string text = FileHandler.GetBlobText(blob_file);
-            
-            List<Employee> employees = new List<Employee>();
             // Obtain the text references/entities
-            employees = NLPClient.EntityRecognition(text);
+            blob_references = NLPClient.EntityRecognition(text);
+            // Assign the recognized employees to the blob
+            blob.References = blob_references;
 
-            List<string> references = new List<string>();
-           
-            foreach (Employee employee in employees)
-            {
-                string json_employee = JsonSerializer.Serialize(employee);
-                references.Add(json_employee);
-                Console.WriteLine(json_employee);
-            }
-            blob.References = references;
-            /*
-            for (int i = 0; i < employees.Count; i++)
-                Console.WriteLine(employees[i].Name + " " + employees[i].Quantity); ;
-            */
+            // Print the recognized employees
+            for (int i = 0; i < blob.References.Count; i++)
+                Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Quantity); ;
+
             // Set true the status of the nlp
             blob.Status = true;
 

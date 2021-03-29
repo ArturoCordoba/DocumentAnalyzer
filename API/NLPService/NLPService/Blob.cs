@@ -7,7 +7,7 @@ namespace NLPService
     public class Blob
     {
         // Blob class constructor
-        public Blob(string title, string url, List<string> references, string owner, bool status) 
+        public Blob(string title, string url, List<Employee> references, string owner, bool status) 
         {
             Title = title;
             Url = url;
@@ -19,7 +19,7 @@ namespace NLPService
         // Atribbutes getters and setters
         public string Title { get; set; }
         public string Url { get; set; }
-        public List<string> References { get; set; }
+        public List<Employee> References { get; set; }
         public string Owner { get; set; }
         public bool Status { get; set; }
     }
