@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using AuthLibrary.Token;
 
-namespace AuthLibrary
+namespace AuthLibrary.Authentication
 {
     class AuthenticationService : IAuthenticationService
     {
