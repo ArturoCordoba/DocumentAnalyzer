@@ -11,6 +11,7 @@ namespace AuthAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -26,7 +27,7 @@ namespace AuthAPI.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [AllowAnonymous]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
@@ -41,7 +42,6 @@ namespace AuthAPI.Controllers
 
         [Route("1")]
         [HttpGet]
-        [Authorize]
         public IEnumerable<WeatherForecast> GetX()
         {
             var rng = new Random();

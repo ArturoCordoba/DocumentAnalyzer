@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 
-using AuthAPI.Authorization;
+using APIAuthLibrary;
 
 using AuthLibrary.Factory;
 using AuthLibrary.Configuration;
@@ -50,6 +50,7 @@ namespace AuthAPI
             /*------------------------------------------------------------------------*/
             AuthServiceConfig.Config.SecretKey = "shfvoilf4ltf645sf4%";
             AuthServiceConfig.Config.IssuerToken = "Test Issuer";
+            AuthServiceConfig.Config.AuthType = "Bearer";
 
             services.AddAuthentication("Authorized")
                 .AddScheme<AuthenticationSchemeOptions, AuthHandler>("Authorized", "Authorized", opts => { });
