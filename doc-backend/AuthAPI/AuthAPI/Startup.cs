@@ -24,6 +24,8 @@ using AuthLibrary.Configuration;
 using DataHandlerSQL.Configuration;
 using DataHandlerSQL.Factory;
 
+using AuthAPI.Services.EncryptionService;
+
 namespace AuthAPI
 {
     public class Startup
@@ -58,6 +60,7 @@ namespace AuthAPI
             AuthServiceConfig.Config.SecretKey = Configuration["TokenConfiguration:SecretKey"];
             AuthServiceConfig.Config.IssuerToken = Configuration["TokenConfiguration:IssuerToken"];
             AuthServiceConfig.Config.AuthType = Configuration["TokenConfiguration:AuthType"];
+            AuthServiceConfig.Config.ExpirationTime = Int32.Parse(Configuration["TokenConfiguration:ExpirationTime"]);
 
             services.AddAuthentication("Authorized")
                 .AddScheme<AuthenticationSchemeOptions, AuthHandler>("Authorized", "Authorized", opts => { });
@@ -72,8 +75,8 @@ namespace AuthAPI
             DataHandlerSQLConfig.Config.ConnectionString = connStringPostgreSQL;
             services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
 
+
             /*------------------------------------------------------------------------*/
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -57,15 +57,6 @@ namespace AuthAPI.Controllers
 
             return Ok(claims.FindFirst(ClaimTypes.Email).Value);
 
-
-            /*var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();*/
         }
 
         [Route("data")]
@@ -73,7 +64,7 @@ namespace AuthAPI.Controllers
         [AllowAnonymous]
         public IActionResult GetData()
         {
-            IRepository<Employee> employeeRep = _unitOfWork.Repository<Employee>();
+            IRepository<Employee> employeeRep = _unitOfWork.GetRepository<Employee>();
             Employee employee = employeeRep.GetById(2);
 
             return Ok(employee.FullName);
