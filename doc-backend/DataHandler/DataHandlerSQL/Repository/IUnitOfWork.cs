@@ -2,7 +2,7 @@
 {
     public interface IUnitOfWork
     {
-        IRepository<TEntity> Repository<TEntity>() where TEntity : class;
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
 
         void Commit();
     }
