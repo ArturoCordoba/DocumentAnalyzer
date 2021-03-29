@@ -13,20 +13,20 @@ namespace DataHandlerSQL.Configuration
 
         private static readonly Lazy<DataHandlerSQLConfig> lazy = new Lazy<DataHandlerSQLConfig>(() => new DataHandlerSQLConfig());
 
-        public static DataHandlerSQLConfig GetConfig
+        public static DataHandlerSQLConfig Config
         {
             get
             {
                 return lazy.Value;
             }
         }
-        // Server = 127.0.0.1; Port = 5432; Database = DocAnalyzer; User Id = postgres; Password = password;
-        private string _Employee_ConnectionString;
 
-        public string Employee_ConnectionString
+        private string _ConnectionString;
+
+        public string ConnectionString
         {
-            get { return _Employee_ConnectionString; }
-            set { _Employee_ConnectionString = value; }
+            get { return _ConnectionString; }
+            set { _ConnectionString = value; }
         }
     }
 }
