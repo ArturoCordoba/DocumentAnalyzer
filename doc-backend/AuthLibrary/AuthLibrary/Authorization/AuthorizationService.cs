@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Security.Claims;
+
 using AuthLibrary.Token;
 
 namespace AuthLibrary.Authorization
@@ -20,6 +22,14 @@ namespace AuthLibrary.Authorization
         public bool Authorize(string token)
         {
             return tokenValidator.VerifyToken(token);
+        }
+
+        public ClaimsPrincipal Claims 
+        {
+            get
+            {
+                return tokenValidator.Claims;
+            }
         }
     }
 }

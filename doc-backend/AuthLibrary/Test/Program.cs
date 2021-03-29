@@ -6,6 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using AuthLibrary.Configuration;
 using AuthLibrary.Factory;
 
+using System.Security.Claims;
+
 namespace Test
 {
     class Program
@@ -27,6 +29,14 @@ namespace Test
             string token = authFactory.Authentication.Authenticate(email, password, correctEmail, correctPassword);
 
             Console.WriteLine(token);
+
+            Console.WriteLine("");
+
+            authFactory.Authorization.Authorize(token);
+
+            ClaimsPrincipal claims = authFactory.Authorization.Claims;
+
+            Console.WriteLine(claims.FindFirst(ClaimTypes.Email).Value);
         }
     }
 }
