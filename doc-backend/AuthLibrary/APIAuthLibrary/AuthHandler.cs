@@ -12,7 +12,7 @@ using System.Security.Claims;
 using AuthLibrary.Configuration;
 using AuthLibrary.Factory;
 
-namespace AuthAPI.Authorization
+namespace APIAuthLibrary
 {
     public class AuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
