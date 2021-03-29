@@ -28,6 +28,7 @@ namespace AuthLibrary.Configuration
         private string _secretKey;
         private string _issuerToken;
         private int _expirationTime;
+        private string _authType;
 
         /// <summary>
         /// SecretKey used to encrypt the token
@@ -54,6 +55,15 @@ namespace AuthLibrary.Configuration
         {
             get { return _expirationTime; }
             set { _expirationTime = value; }
+        }
+
+        /// <summary>
+        /// Authentication type
+        /// </summary>
+        public string AuthType
+        {
+            get { return _authType; }
+            set { _authType = value; }
         }
     }
 }

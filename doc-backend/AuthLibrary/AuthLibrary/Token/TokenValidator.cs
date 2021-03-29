@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace AuthLibrary.Token
 {
@@ -8,11 +9,20 @@ namespace AuthLibrary.Token
     {
         private string secretKey;
         private string issuerToken;
+        private ClaimsPrincipal _Claims;
 
         public TokenValidator(string secretKey, string issuerToken)
         {
             this.secretKey = secretKey;
             this.issuerToken = issuerToken;
+        }
+
+        public ClaimsPrincipal Claims
+        {
+            get
+            {
+                return _Claims;
+            }
         }
 
         /// <summary>
@@ -30,7 +40,7 @@ namespace AuthLibrary.Token
                 var validationParameters = TokenValidationParameters();
 
                 // This method throws an exception if the token is invalid
-                tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+                _Claims = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
 
                 return true;
             }

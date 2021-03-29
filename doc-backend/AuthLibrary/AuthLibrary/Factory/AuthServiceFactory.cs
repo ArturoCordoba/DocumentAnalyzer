@@ -17,6 +17,9 @@ namespace AuthLibrary.Factory
         private string issuerToken;
         private int expirationTime;
 
+        private IAuthorizationService _Authorization = null;
+        private IAuthenticationService _Authentication = null;
+
         public AuthServiceFactory()
         {
             // The configuration is obtained from the AuthServiceConfig
@@ -33,12 +36,21 @@ namespace AuthLibrary.Factory
         {
             get
             {
-                // Creation of the validator
-                ITokenValidator tokenValidator = new TokenValidator(secretKey, issuerToken);
-
-                // Creation of the AuthorizationService
-                return new AuthorizationService(tokenValidator);
+                return _Authorization ??= buildAuthorizationService();
             }
+        }
+
+        /// <summary>
+        /// Method to build an IAuthorizationService
+        /// </summary>
+        /// <returns>IAuthorizationService</returns>
+        private IAuthorizationService buildAuthorizationService()
+        {
+            // Creation of the validator
+            ITokenValidator tokenValidator = new TokenValidator(secretKey, issuerToken);
+
+            // Creation of the AuthorizationService
+            return new AuthorizationService(tokenValidator);
         }
 
         /// <summary>
@@ -49,12 +61,21 @@ namespace AuthLibrary.Factory
         {
             get
             {
-                // Creation of the token generator
-                ITokenGenerator tokenGenerator = new TokenGenerator(secretKey, issuerToken, expirationTime);
-
-                // Creation of the Authentication Service
-                return new AuthenticationService(tokenGenerator);
+                return _Authentication ??= buildAuthenticationService();
             }
+        }
+
+        /// <summary>
+        /// Method to build an IAuthenticationService
+        /// </summary>
+        /// <returns>IAuthenticationService</returns>
+        private IAuthenticationService buildAuthenticationService()
+        {
+            // Creation of the token generator
+            ITokenGenerator tokenGenerator = new TokenGenerator(secretKey, issuerToken, expirationTime);
+
+            // Creation of the Authentication Service
+            return new AuthenticationService(tokenGenerator);
         }
     }
 }
