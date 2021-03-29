@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using AuthLibrary.Configuration;
 using AuthLibrary.Authorization;
+using AuthLibrary.Authentication;
 using AuthLibrary.Token;
 
 namespace AuthLibrary.Factory
