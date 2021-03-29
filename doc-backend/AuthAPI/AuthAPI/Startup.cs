@@ -14,10 +14,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 
+using Microsoft.EntityFrameworkCore;
+
 using APIAuthLibrary;
 
 using AuthLibrary.Factory;
 using AuthLibrary.Configuration;
+
+using DataHandlerSQL.Configuration;
+using DataHandlerSQL.Factory;
 
 namespace AuthAPI
 {
@@ -48,16 +53,27 @@ namespace AuthAPI
 
 
             /*------------------------------------------------------------------------*/
-            AuthServiceConfig.Config.SecretKey = "shfvoilf4ltf645sf4%";
-            AuthServiceConfig.Config.IssuerToken = "Test Issuer";
-            AuthServiceConfig.Config.AuthType = "Bearer";
+            // Configuration related to the APIAuthLibrary & AuthLibrary
+            /*------------------------------------------------------------------------*/
+            AuthServiceConfig.Config.SecretKey = Configuration["TokenConfiguration:SecretKey"];
+            AuthServiceConfig.Config.IssuerToken = Configuration["TokenConfiguration:IssuerToken"];
+            AuthServiceConfig.Config.AuthType = Configuration["TokenConfiguration:AuthType"];
 
             services.AddAuthentication("Authorized")
                 .AddScheme<AuthenticationSchemeOptions, AuthHandler>("Authorized", "Authorized", opts => { });
 
-
             services.AddScoped<IAuthServiceFactory, AuthServiceFactory>();
 
+
+            /*------------------------------------------------------------------------*/
+            // Configuration related to the DataHandlerSQL
+            /*------------------------------------------------------------------------*/
+            string connStringPostgreSQL = Configuration["ConnectionStrings:PostgreSQL_DB"];
+            DataHandlerSQLConfig.Config.ConnectionString = connStringPostgreSQL;
+            services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
+
+            /*------------------------------------------------------------------------*/
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
