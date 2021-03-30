@@ -10,6 +10,10 @@ namespace DataHandlerMongoDB.Repository
     {
         IQueryable<TDocument> AsQueryable();
 
+        IEnumerable<TDocument> GetAll();
+
+        Task<List<TDocument>> GetAllAsync();
+
         IEnumerable<TDocument> FilterBy(
             Expression<Func<TDocument, bool>> filterExpression);
 
