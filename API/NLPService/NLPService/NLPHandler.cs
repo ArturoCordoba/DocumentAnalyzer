@@ -96,7 +96,7 @@ namespace NLPService
             //Console.WriteLine(blob_type);
             if (blob_type.Equals("application/pdf"))
             {
-                string fileName = @"C:\Users\fagon\source\repos\TestNPL\TestNPL\file.pdf";
+                string fileName = @"C:\Users\marcs\Desktop\ProyectoNo1\Test\lorem.pdf";
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
@@ -124,7 +124,7 @@ namespace NLPService
             }
             else if (blob_type.Equals("text/plain"))
             {
-                string fileName = @"C:\Users\fagon\source\repos\TestNPL\TestNPL\file.txt";
+                string fileName = @"C:\Users\marcs\Desktop\ProyectoNo1\Test\lorem.txt";
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
