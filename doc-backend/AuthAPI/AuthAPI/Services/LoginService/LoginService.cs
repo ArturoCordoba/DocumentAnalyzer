@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using AuthLibrary.Authorization;
 
-using DataHandlerSQL;
+using DataHandlerSQL.Model;
 using DataHandlerSQL.Factory;
 using DataHandlerSQL.Repository;
 
@@ -19,13 +19,13 @@ namespace AuthAPI.Services.LoginService
     public class LoginService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Usercredential> _userRepository;
+        private readonly IRepository<UserCredential> _userRepository;
         private readonly IAuthenticationService _authentication;
 
         public LoginService(IUnitOfWorkFactory unitOfWorkFactory, IAuthServiceFactory authServiceFactory)
         {
             _unitOfWork = unitOfWorkFactory.Create();
-            _userRepository = _unitOfWork.GetRepository<Usercredential>();
+            _userRepository = _unitOfWork.GetRepository<UserCredential>();
             _authentication = authServiceFactory.Authentication;
         }
 
@@ -43,7 +43,7 @@ namespace AuthAPI.Services.LoginService
             if (requestData.email == null) return null;
 
             // Checks if is an user is registered with the received email
-            Usercredential user = _userRepository.Get(user => user.Email == requestData.email).FirstOrDefault();
+            UserCredential user = _userRepository.Get(user => user.Email == requestData.email).FirstOrDefault();
             if (user == null) return null;
 
             // Decode and encode the received password 
