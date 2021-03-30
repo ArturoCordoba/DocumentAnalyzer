@@ -1,10 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DataHandlerSQL;
-using DataHandlerSQL.Repository;
 using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
+
+using DataHandlerSQL.Repository;
+using DataHandlerSQL.Model;
 
 namespace DataHandlerSQLTest
 {
@@ -85,7 +86,7 @@ namespace DataHandlerSQLTest
             Employee updatedEmployee = repository.Get(employee => employee.FullName == newName).FirstOrDefault();
 
             Assert.IsNotNull(updatedEmployee);
-            Assert.AreEqual(employee.UserId, updatedEmployee.UserId);
+            Assert.AreEqual(employee.EmployeeId, updatedEmployee.EmployeeId);
         }
 
         [TestMethod]
@@ -94,7 +95,7 @@ namespace DataHandlerSQLTest
             int id = 100000;
             Employee employee = new Employee();
             employee.FullName = "Test employee #3434sd3f5s3fd";
-            employee.UserId = id;
+            employee.EmployeeId = id;
 
             repository.Insert(employee);
             unitOfWork.Commit();

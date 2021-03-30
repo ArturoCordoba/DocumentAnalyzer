@@ -1,10 +1,12 @@
 ﻿using System;
-using DataHandlerSQL;
 using DataHandlerSQL.Configuration;
 using DataHandlerSQL.Factory;
 using DataHandlerSQL.Repository;
+using DataHandlerSQL.Model;
 using System.Collections.Generic;
 using System.Linq;
+
+
 
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +23,9 @@ namespace Test
             IUnitOfWorkFactory factory = new UnitOfWorkFactory();
             IUnitOfWork unitOfWork = factory.Create();
 
-            IRepository<Usercredential> rpUsercredential = unitOfWork.GetRepository<Usercredential>();
+            IRepository<UserCredential> rpUsercredential = unitOfWork.GetRepository<UserCredential>();
 
-            Usercredential usercredential = new Usercredential();
+            UserCredential usercredential = new UserCredential();
             usercredential.FullName = "IUnitOfWorkFactory Test";
             usercredential.UserPassword = "test";
             usercredential.Email = "IUnitOfWorkFactory@gmail.com";

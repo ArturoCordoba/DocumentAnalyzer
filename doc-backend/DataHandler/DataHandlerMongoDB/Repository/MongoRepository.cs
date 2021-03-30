@@ -34,6 +34,16 @@ namespace DataHandlerMongoDB.Repository
             return _collection.AsQueryable();
         }
 
+        public virtual IEnumerable<TDocument> GetAll()
+        {
+            return _collection.Find(Builders<TDocument>.Filter.Empty).ToList();
+        }
+
+        public virtual Task<List<TDocument>> GetAllAsync()
+        {
+            return _collection.Find(Builders<TDocument>.Filter.Empty).ToListAsync();
+        }
+
         public virtual IEnumerable<TDocument> FilterBy(
             Expression<Func<TDocument, bool>> filterExpression)
         {
