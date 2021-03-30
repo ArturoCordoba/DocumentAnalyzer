@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using DataHandlerSQL;
+using DataHandlerSQL.Model;
 using DataHandlerSQL.Factory;
 using DataHandlerSQL.Repository;
 
@@ -22,11 +22,11 @@ namespace AuthAPI.Services.SignupService
     public class SignupService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Usercredential> _userRepository;
+        private readonly IRepository<UserCredential> _userRepository;
         public SignupService(IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWork = unitOfWorkFactory.Create();
-            _userRepository = _unitOfWork.GetRepository<Usercredential>();
+            _userRepository = _unitOfWork.GetRepository<UserCredential>();
         }
 
         public SignupResult Signup(SignupDto userData)
@@ -47,7 +47,7 @@ namespace AuthAPI.Services.SignupService
             string password = Encrypt.EncodeSHA256(receivedPassword);
             password = Encrypt.Base64Encode(password);
 
-            Usercredential newUser = new Usercredential();
+            UserCredential newUser = new UserCredential();
             newUser.Email = userData.email;
             newUser.FullName = userData.fullName;
             newUser.UserPassword = password;
@@ -67,7 +67,7 @@ namespace AuthAPI.Services.SignupService
         /// <returns></returns>
         private bool isEmailAvailable(string email)
         {
-            Usercredential user = _userRepository.Get(user => user.Email == email).FirstOrDefault();
+            UserCredential user = _userRepository.Get(user => user.Email == email).FirstOrDefault();
 
             if (user != null) return false;
 
