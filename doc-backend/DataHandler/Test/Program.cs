@@ -20,7 +20,7 @@ namespace Test
             IUnitOfWorkFactory factory = new UnitOfWorkFactory();
             IUnitOfWork unitOfWork = factory.Create();
 
-            IRepository<Usercredential> rpUsercredential = unitOfWork.Repository<Usercredential>();
+            IRepository<Usercredential> rpUsercredential = unitOfWork.GetRepository<Usercredential>();
 
             Usercredential usercredential = new Usercredential();
             usercredential.FullName = "IUnitOfWorkFactory Test";
