@@ -7,17 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace DataHandlerSQL
+namespace DataHandlerSQL.Model
 {
     [Table("employee")]
     public partial class Employee
     {
+        public Employee()
+        {
+            EmployeeReferenceByDocument = new HashSet<EmployeeReferenceByDocument>();
+        }
+
         [Key]
-        [Column("user_id")]
-        public int UserId { get; set; }
+        [Column("employee_id")]
+        public int EmployeeId { get; set; }
         [Required]
         [Column("full_name")]
         [StringLength(100)]
         public string FullName { get; set; }
+
+        [InverseProperty("Employee")]
+        public virtual ICollection<EmployeeReferenceByDocument> EmployeeReferenceByDocument { get; set; }
     }
 }

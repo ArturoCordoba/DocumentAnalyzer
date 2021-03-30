@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
 
-namespace DataHandlerSQL
+namespace DataHandlerSQL.Model
 {
-    [Table("usercredential")]
-    [IndexAttribute(nameof(Email), Name = "usercredential_email_key", IsUnique = true)]
-    public partial class Usercredential
+    [Table("user_credential")]
+    [IndexAttribute(nameof(Email), Name = "user_credential_email_key", IsUnique = true)]
+    public partial class UserCredential
     {
         [Key]
         [Column("user_id")]

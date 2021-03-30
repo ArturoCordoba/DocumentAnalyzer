@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace DataHandlerSQL
+namespace DataHandlerSQL.Model
 {
     public partial class DocAnalyzerContext : DbContext
     {
@@ -19,22 +19,31 @@ namespace DataHandlerSQL
         }
 
         public virtual DbSet<Employee> Employee { get; set; }
-        public virtual DbSet<Usercredential> Usercredential { get; set; }
+        public virtual DbSet<EmployeeReferenceByDocument> EmployeeReferenceByDocument { get; set; }
+        public virtual DbSet<UserCredential> UserCredential { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Spanish_Costa Rica.1252");
 
-            modelBuilder.Entity<Employee>(entity =>
+            modelBuilder.Entity<EmployeeReferenceByDocument>(entity =>
             {
-                entity.HasKey(e => e.UserId)
-                    .HasName("employee_pkey");
+                entity.HasKey(e => new { e.EmployeeId, e.DocumentId })
+                    .HasName("employee_reference_by_document_pkey");
+
+                entity.Property(e => e.Ocurrences).HasDefaultValueSql("0");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.EmployeeReferenceByDocument)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_employee_id");
             });
 
-            modelBuilder.Entity<Usercredential>(entity =>
+            modelBuilder.Entity<UserCredential>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                    .HasName("usercredential_pkey");
+                    .HasName("user_credential_pkey");
             });
 
             OnModelCreatingPartial(modelBuilder);

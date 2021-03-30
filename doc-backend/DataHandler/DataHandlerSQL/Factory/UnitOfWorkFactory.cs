@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using DataHandlerSQL.Configuration;
 using DataHandlerSQL.Repository;
+using DataHandlerSQL.Model;
 
 namespace DataHandlerSQL.Factory
 {
