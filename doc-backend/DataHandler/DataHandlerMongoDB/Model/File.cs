@@ -20,6 +20,9 @@ namespace DataHandlerMongoDB.Model
         [BsonElement(elementName: "url")]
         public string Url { get; set; }
 
+        [BsonElement(elementName: "status")]
+        public bool Status { get; set; }
+
         [BsonElement(elementName: "references")]
         public Reference[] References { get; set; }
 
