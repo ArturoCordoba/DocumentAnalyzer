@@ -17,7 +17,8 @@ namespace Test
 {
     class MongoDB
     {
-        static void Main(string[] args)
+        
+        /*static void Main(string[] args)
         {
             DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
             DataHandlerMongoDBConfig.Config.DataBaseName = "DocAnalyzer";
@@ -26,22 +27,29 @@ namespace Test
 
             IMongoRepository<File> repository = repositoryFactory.Create<File>();
 
-            /*File file = new File();
-            file.Title = "Introduction to MongoDb with .NET";
-            file.Owner = 4;
-            file.Url = "http://www.google.co.cr";
+            //File file = new File();
+            //file.Title = "Introduction to MongoDb with .NET";
+            //file.Owner = 4;
+            //file.Url = "http://www.google.co.cr";
 
-            repository.InsertOne(file);*/
+            //repository.InsertOne(file);
 
-            string title = "Introduction to MongoDb with .NET";
+            //string title = "Introduction to MongoDb with .NET";
 
-            File file = repository.FindOne(file => file.Title == title);
+            //File file = repository.FindOne(file => file.Title == title);
 
-            Console.WriteLine(file.Id);
+            //Console.WriteLine(file.Id);
 
-            file.Owner = 10;
+            //file.Owner = 10;
 
-            repository.ReplaceOne(file);
-        }
+            //repository.ReplaceOne(file);
+
+            List<File> files = repository.GetAll().ToList();
+
+            foreach (File file in files)
+            {
+                Console.WriteLine(file.Status);
+            }
+        }*/
     }
 }
