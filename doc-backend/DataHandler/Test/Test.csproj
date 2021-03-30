@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataHandlerMongoDB\DataHandlerMongoDB.csproj" />
     <ProjectReference Include="..\DataHandlerSQL\DataHandlerSQL.csproj" />
   </ItemGroup>
 
