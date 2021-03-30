@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLPService", "NLPService\NLPService.csproj", "{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1D27F870-DBA8-43C4-9281-859F8AD46C82}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {933EBDBD-FCE4-4575-AE54-1F8D87618C49}
+	EndGlobalSection
+EndGlobal
