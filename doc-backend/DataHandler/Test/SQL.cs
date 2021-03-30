@@ -10,8 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Test
 {
-    class Program
+    class SQL
     {
+        /*
         static void Main(string[] args)
         {
             string connString = "Server = 127.0.0.1; Port = 5432; Database = DocAnalyzer; User Id = postgres; Password = password;";
@@ -31,5 +32,6 @@ namespace Test
 
             unitOfWork.Commit();
         }
+        */
     }
 }
