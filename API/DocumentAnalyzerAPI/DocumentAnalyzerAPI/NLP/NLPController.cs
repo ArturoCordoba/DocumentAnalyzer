@@ -8,7 +8,7 @@ namespace NLPService
 {
     public class NLPController
     {
-        public static string AnalyzeDocument(string blob_url, string blob_owner)
+        public static void AnalyzeDocument(string blob_url, string blob_owner)
         {
             // Obtain the blob title
             string blob_title = blob_url.Replace("https://soafiles.blob.core.windows.net/files/", "");
@@ -33,15 +33,13 @@ namespace NLPService
 
             // Print the recognized employees
             for (int i = 0; i < blob.References.Count; i++)
-                Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Quantity); ;
+                Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Qty); ;
 
             // Set true the status of the nlp
             blob.Status = true;
 
             string jsonString = JsonSerializer.Serialize(blob);
             //Console.WriteLine(jsonString);
-            return jsonString;
-
         }
     }
 }

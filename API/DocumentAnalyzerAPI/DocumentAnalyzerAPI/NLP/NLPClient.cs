@@ -29,7 +29,7 @@ namespace NLPService
                     if (entities.Exists(person => person.Name == entity.Text)) 
                     {
                         var employee = entities.Find(person => person.Name == entity.Text);
-                        employee.Quantity += 1;
+                        employee.Qty += 1;
                     }
                     else
                     {
