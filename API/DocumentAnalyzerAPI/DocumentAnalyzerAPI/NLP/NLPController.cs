@@ -8,7 +8,7 @@ namespace NLPService
 {
     public class NLPController
     {
-        public static void AnalyzeDocument(string blob_url, string blob_owner)
+        public static string AnalyzeDocument(string blob_url, string blob_owner)
         {
             // Obtain the blob title
             string blob_title = blob_url.Replace("https://soafiles.blob.core.windows.net/files/", "");
@@ -40,6 +40,7 @@ namespace NLPService
 
             string jsonString = JsonSerializer.Serialize(blob);
             //Console.WriteLine(jsonString);
+            return jsonString;
         }
     }
 }

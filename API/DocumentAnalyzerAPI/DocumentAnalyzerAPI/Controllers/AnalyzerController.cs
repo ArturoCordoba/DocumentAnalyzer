@@ -57,9 +57,10 @@ namespace DocumentAnalyzerAPI.Controllers
             NotificationData data = JsonConvert.DeserializeObject<NotificationData>(body);
 
             // Process document
-            NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner); // Database insertion of result is done within the NLP Service.
-
-            return Ok();
+            string nlpResult = NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner); // Database insertion of result is done within the NLP Service.
+            //FileMongo result = JsonConvert.DeserializeObject<FileMongo>(nlpResult);
+            //mongo_repository.InsertOne(result);
+            return Ok(nlpResult);
         }
 
         [HttpGet, Route("/documents/user={user_id}/")]
@@ -95,10 +96,12 @@ namespace DocumentAnalyzerAPI.Controllers
 
             ResultRequest req = System.Text.Json.JsonSerializer.Deserialize<ResultRequest>(body);
 
-            List<Reference> processingResults = EmployeeFinder.FindEmployeeReferences(req, mongo_repository, unit_of_work);
+            List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(req, mongo_repository, unit_of_work);
             string jsonResult = System.Text.Json.JsonSerializer.Serialize(processingResults);
+
+            EmployeeFinder.AddUserReferences(processingResults, req, unit_of_work);
             /*
-             * Returns JSON = [{"Name":String, "Qty":Integer}, {"Name":String, "Qty":Integer}, ...]
+             * Returns JSON = [{"Name":String, "Qty":Integer, "employeeId": Integer}, {"Name":String, "Qty":Integer, "employeeId": Integer}, ...]
              * */
             return Ok(jsonResult);
         }
