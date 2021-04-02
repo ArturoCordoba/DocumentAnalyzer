@@ -14,9 +14,9 @@ namespace DocumentASnalyzerAPI.Models
 {
     public class EmployeeFinder
     {
-        public static List<Match> FindEmployeeReferences(ResultRequest req, 
-                                                             IMongoRepository<FileMongo> repository,
-                                                             IUnitOfWork unit_of_work)
+        public static List<Match> FindEmployeeReferences(NotificationData req, 
+                                                         IMongoRepository<FileMongo> repository,
+                                                         IUnitOfWork unit_of_work)
         {
             List<FileMongo> userFiles = repository.FilterBy(file => file.Title == req.Title && file.Owner == req.Owner).ToList();
             IRepository<Employee> employeeRepo = unit_of_work.GetRepository<Employee>();
@@ -27,17 +27,17 @@ namespace DocumentASnalyzerAPI.Models
             {
                 foreach(Reference fileRef in file.References)
                 {
-                    (bool, int) isReferenced = IsEmployeeReferenced(employeeList, fileRef.Name);
+                    (bool, int, string) isReferenced = IsEmployeeReferenced(employeeList, fileRef.Name);
                     if (isReferenced.Item1)
                     {
-                        employeesIdentified.Add(new Match(fileRef.Name, fileRef.Qty, isReferenced.Item2));
+                        employeesIdentified.Add(new Match(isReferenced.Item3, fileRef.Qty, isReferenced.Item2));
                     }
                 }
             }
             return employeesIdentified;
         }
 
-        private static (bool, int) IsEmployeeReferenced(List<Employee> employeeLst, string employeeName)
+        private static (bool, int, string) IsEmployeeReferenced(List<Employee> employeeLst, string employeeName)
         {
             string[] splitSearchName = employeeName.ToLower().Split(' ');
 
@@ -51,7 +51,7 @@ namespace DocumentASnalyzerAPI.Models
 
                     if (emp.FullName.Equals(employeeName)) // first verify if it's a total match
                     {
-                        return (true, emp.EmployeeId);
+                        return (true, emp.EmployeeId, emp.FullName);
                     }
                     else if (currentDBEmployeeName.First().Equals(splitSearchName.First()))
                     {
@@ -66,7 +66,7 @@ namespace DocumentASnalyzerAPI.Models
 
                         if (diff == 1 && similarCount == 1) // if there is one lastname missing but there is only one employee with that name, it counts as a match
                         {
-                            return (true, emp.EmployeeId);
+                            return (true, emp.EmployeeId, emp.FullName);
                         }
                         else
                         {
@@ -75,7 +75,7 @@ namespace DocumentASnalyzerAPI.Models
                     }
                 }
             }
-            return (false, -1);
+            return (false, -1, String.Empty);
         }
 
         private static int CountEmployeeOccurrences(string[] employeeSplit, List<Employee> employeeLst)
@@ -107,7 +107,7 @@ namespace DocumentASnalyzerAPI.Models
         }
 
         public static void AddUserReferences(List<Match> processingResult,
-                                             ResultRequest req,
+                                             NotificationData req,
                                              IUnitOfWork unit_of_work)
         {
             IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
@@ -125,7 +125,7 @@ namespace DocumentASnalyzerAPI.Models
                     referencesRepo.Insert(newMatch);
                 } else
                 {
-                    referencesRepo.Update(newMatch);
+                    //referencesRepo.Update(newMatch);
                 }
                 unit_of_work.Commit();
             }
@@ -138,6 +138,29 @@ namespace DocumentASnalyzerAPI.Models
                 if (eRef.EmployeeId == empId && eRef.DocumentId.Equals(docId)) return true;
             }
             return false;
+        }
+
+        public static string GetDocumentReferences(ResultRequest req, IUnitOfWork unit_of_work)
+        {
+            IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
+            IRepository<Employee> empRepo = unit_of_work.GetRepository<Employee>();
+            List<EmployeeReferenceByDocument> userRefs = referencesRepo.Get().ToList();
+            List<Reference> docReferences = new List<Reference>();
+
+
+            foreach(EmployeeReferenceByDocument docRef in userRefs)
+            {
+                if(docRef.DocumentId.Equals(req.Title))
+                {
+                    Employee emp = empRepo.GetById(docRef.EmployeeId);
+                    Reference newRef = new Reference();
+                    newRef.Name = emp.FullName;
+                    newRef.Qty = (int) docRef.Ocurrences;
+                    docReferences.Add(newRef);
+                } 
+            }
+
+            return System.Text.Json.JsonSerializer.Serialize(docReferences);
         }
     }
 }

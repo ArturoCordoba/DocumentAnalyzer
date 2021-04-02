@@ -37,7 +37,8 @@ namespace DocumentAnalyzerAPI.Controllers
         public IActionResult NotifyDocument() 
         {
             /* Receives a JSON [body] = {"owner": Integer, 
-             *                    "url":"https://soafiles.blob.core.windows.net/files/..."}
+             *                           "url":"https://soafiles.blob.core.windows.net/files/...",
+             *                           "title": String}
              * 
              * 
              */
@@ -57,10 +58,15 @@ namespace DocumentAnalyzerAPI.Controllers
             NotificationData data = JsonConvert.DeserializeObject<NotificationData>(body);
 
             // Process document
-            string nlpResult = NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner); // Database insertion of result is done within the NLP Service.
+            string nlpResult = NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner.ToString()); // Database insertion of result is done within the NLP Service.
             //FileMongo result = JsonConvert.DeserializeObject<FileMongo>(nlpResult);
             //mongo_repository.InsertOne(result);
-            return Ok(nlpResult);
+            List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
+            string jsonResult = System.Text.Json.JsonSerializer.Serialize(processingResults);
+
+            EmployeeFinder.AddUserReferences(processingResults, data, unit_of_work);
+
+            return Ok(jsonResult);
         }
 
         [HttpGet, Route("/documents/user={user_id}/")]
@@ -79,6 +85,7 @@ namespace DocumentAnalyzerAPI.Controllers
         [HttpGet, Route("/documents/results/")]
         public IActionResult GetProcessingResult()
         {
+
             /*
              * Receives body JSON = {"Owner":Integer, "Title": String}
              * 
@@ -88,7 +95,7 @@ namespace DocumentAnalyzerAPI.Controllers
 
             var body = String.Empty;
 
-            // reads request's body
+            
             using (var reader = new StreamReader(Request.Body))
             {
                 body = reader.ReadToEnd();
@@ -96,14 +103,11 @@ namespace DocumentAnalyzerAPI.Controllers
 
             ResultRequest req = System.Text.Json.JsonSerializer.Deserialize<ResultRequest>(body);
 
-            List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(req, mongo_repository, unit_of_work);
-            string jsonResult = System.Text.Json.JsonSerializer.Serialize(processingResults);
-
-            EmployeeFinder.AddUserReferences(processingResults, req, unit_of_work);
             /*
              * Returns JSON = [{"Name":String, "Qty":Integer, "employeeId": Integer}, {"Name":String, "Qty":Integer, "employeeId": Integer}, ...]
              * */
-            return Ok(jsonResult);
+    
+            return Ok(EmployeeFinder.GetDocumentReferences(req, unit_of_work));
         }
 
         private void AllowSync()

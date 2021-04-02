@@ -7,7 +7,8 @@ namespace DocumentAnalyzerAPI.Models
 {
     public class NotificationData
     {
-        public string Owner;
+        public int Owner;
         public string Url;
+        public string Title;
     }
 }
