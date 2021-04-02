@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+
 
 namespace NLPService
 {
@@ -87,6 +90,13 @@ namespace NLPService
                 string text = "El formato del documento no es soportado";
                 return text;
             }
+        }
+
+        public static string SerializeBlob(Blob blob)
+        {
+            // Serialize the Blob object
+            string jsonString = JsonSerializer.Serialize(blob);
+            return jsonString;
         }
     }
 }

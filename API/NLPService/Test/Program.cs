@@ -7,11 +7,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            string url = "https://soafiles.blob.core.windows.net/files/prueba.txt";
-            //string url = "https://soafiles.blob.core.windows.net/files/prueba.docx";
-            //string url = "https://soafiles.blob.core.windows.net/files/prueba.pdf";
-            string owner = "Fabian";
-            NLPController.AnalyzeDocument(url, owner);
+            NLPController.Instance.StartService();
             Console.Write("Press any key to exit.");
             Console.ReadKey();
         }
