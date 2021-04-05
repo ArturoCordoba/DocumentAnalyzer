@@ -33,7 +33,7 @@ namespace NLPService
 
             // Print the recognized employees
             for (int i = 0; i < blob.References.Count; i++)
-                Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Quantity); ;
+                Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Qty); ;
 
             // Set true the status of the nlp
             blob.Status = true;
@@ -41,7 +41,6 @@ namespace NLPService
             string jsonString = JsonSerializer.Serialize(blob);
             //Console.WriteLine(jsonString);
             return jsonString;
-
         }
     }
 }

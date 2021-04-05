@@ -12,11 +12,11 @@ namespace NLPService
         public Employee(string name, int quantity)
         {
             Name = name;
-            Quantity = quantity;
+            Qty = quantity;
         }
 
         // Atribbutes getters and setters
         public string Name { get; set; }
-        public int Quantity { get; set; }
+        public int Qty { get; set; }
     }
 }

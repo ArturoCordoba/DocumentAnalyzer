@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace DocumentAnalyzerAPI.Models
 {
-    public class NotificationData
+    public class ResultRequest
     {
-        public int Owner;
-        public string Url;
-        public string Title;
+        public string Title { get; set; }
+        public int Owner { get; set; }
     }
 }
