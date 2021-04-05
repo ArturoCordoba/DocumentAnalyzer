@@ -6,11 +6,13 @@ using System.Threading;
 namespace NLPService
 {
     public sealed class NLPController
-    {
+    {   
+        //NLPController constructor
         private NLPController()
         {
         }
 
+        //NLP singleton object
         private static NLPController instance = null;
         public static NLPController Instance
         {
@@ -24,14 +26,21 @@ namespace NLPService
             }
         }
 
+        // Creates the processing queue for blob documents
         private readonly Queue<Blob> blob_queue = new Queue<Blob>();
 
+        /**
+         * Method which enqueues a document into the processing queue
+         */
         public void EnqueueBlob(Blob item)
         {
+            // Locks the processing queue
             lock (blob_queue)
             {
                 Console.WriteLine("Agregando documento en la cola...");
+                // Enqueue the document for processing
                 blob_queue.Enqueue(item);
+                // Condition to wake up any blocked dequeue
                 if (blob_queue.Count == 1)
                 {
                     // Wake up any blocked dequeue
@@ -39,21 +48,33 @@ namespace NLPService
                 }
             }
         }
+
+        /**
+         * Method which dequeues a document from the processing queue.
+         * Return: document object popped from the processing queue.
+         */
         public Blob DequeueBlob()
         {
             lock (blob_queue)
             {
                 Console.WriteLine("Extrayendo documento de cola...");
+                // Condition for the analyzer thread to wait
                 while (blob_queue.Count == 0)
                 {
                     Monitor.Wait(blob_queue);
                     Console.WriteLine("Esperando documento en cola...");
                 }
+                // Dequeue a blolb document from the processing queue
                 Blob item = blob_queue.Dequeue();
                 return item;
             }
         }
 
+        /**
+         * Method which creates a document object and adds it to the processing queue.
+         * blob_url: azure blob storage document url.
+         * blob_owner: name of the employee who uploaded the document to the azure blob storage.
+         */
         public void AddDocument(string blob_url, string blob_owner)
         {
             // Obtain the blob title
@@ -64,10 +85,12 @@ namespace NLPService
             var blob = new Blob(blob_title, blob_url, blob_references, blob_owner, false);
             // Enqueue the new blob
             EnqueueBlob(blob);
-
             Console.WriteLine("Documento agregado...");
         }
 
+        /**
+         * Method of the analyzer thread in charge of recognizing the documents person entities
+         */
         public void AnalyzeDocument()
         {
             while (true)
@@ -84,18 +107,24 @@ namespace NLPService
                 // Obtain the text references/entities
                 blob.References = NLPClient.EntityRecognition(text);
                 
-
                 // Print the recognized employees
                 for (int i = 0; i < blob.References.Count; i++)
                     Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Quantity);
             }
         }
 
+        /**
+         * Test thread to add documents to the queue
+         */
         public void TestThread()
         {
+            // Blob url of the first document
             string url1 = "https://soafiles.blob.core.windows.net/files/prueba.txt";
+            // Blob url of the second document
             string url2 = "https://soafiles.blob.core.windows.net/files/prueba.docx";
+            // Blob url of the third document
             string url3 = "https://soafiles.blob.core.windows.net/files/prueba.pdf";
+            // Blob owner of the documents
             string owner = "Fabian";
 
             /*
@@ -110,18 +139,30 @@ namespace NLPService
             }
             */
 
+            // Adds the first document to the queue
             AddDocument(url1, owner);
+            // Adds the second document to the queue
             AddDocument(url2, owner);
+            // Adds the third document to the queue
             AddDocument(url3, owner);
         }
 
+        /**
+         * Method which starts the threads of the NLP service
+         */
         public void StartService()
         {
+            // Creates the thread that analyzes the documents in queue
             Thread analyze_thread = new Thread(new ThreadStart(AnalyzeDocument));
+            // Creates the test thread to add documents into the queue
             Thread test_thread = new Thread(new ThreadStart(TestThread));
+            // Starts the analyzer thread
             analyze_thread.Start();
+            // Starts the test thread
             test_thread.Start();
+            // Waits for the analyzer thread to finish
             analyze_thread.Join();
+            // Waits for the test thread to finish
             test_thread.Join();
         }
     }

@@ -11,6 +11,10 @@ namespace NLPService
         // Set the endpoint of the client
         private static readonly Uri endpoint = new Uri("https://soa-nlp-api.cognitiveservices.azure.com/");
 
+        /**
+         * Method which recognizes all the entities of a document.
+         * document: document text to be analyzed.
+         */
         public static List<Employee> EntityRecognition(string document)
         {
             // Creates a client of the NLP API
@@ -23,8 +27,10 @@ namespace NLPService
             Console.WriteLine("Named Entities:");
             foreach (var entity in response.Value)
             {
+                // Condition to identifies all the person entities
                 if (entity.Category == "Person")
                 {
+                    // Name of the recognized entity
                     string name = entity.Text;
                     if (entities.Exists(person => person.Name == entity.Text)) 
                     {

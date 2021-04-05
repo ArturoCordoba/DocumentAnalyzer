@@ -8,6 +8,10 @@ namespace NLPService
 {
     public class FileHandler
     {
+        /**
+         * Method which extracts the text from a pdf file.
+         * file_path: temporary path of the pdf file.
+         */
         public static string GetTextFromPDF(string file_path)
         {
             // Creates a new pdf document object
@@ -22,7 +26,11 @@ namespace NLPService
             }
             return text.ToString();
         }
-      
+        
+        /**
+         * Method which extracts the text from a word file.
+         * file_path: temporary path of the word file.
+         */
         public static string GetTextFromWord(string file_path)
         {
             // Creates a new word document object
@@ -34,6 +42,10 @@ namespace NLPService
             return text;
         }
   
+        /**
+         * Method which extracts the text from a plain text file.
+         * file_path: temporary path of the word file.
+         */
         public static string GetTextFromTxt(string file_path)
         {   
             // Creates a strubg with all text from the plain text file
@@ -41,6 +53,11 @@ namespace NLPService
             return text.ToString();
         }
 
+
+        /**
+         * Method which extracts the text from the download blob document.
+         * file_path: temporary path of the downloaded blob document.
+         */
         public static string GetBlobText(string file_path)
         {
             // Obtain the extension of the file

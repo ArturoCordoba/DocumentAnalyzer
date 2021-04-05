@@ -11,6 +11,10 @@ namespace NLPService
 {
     class DataHandler
     {
+        /**
+         * Methods which downloads the blob document from the azure blob storage.
+         * blob: client of blob document from the object storage
+         */
         public static Response<BlobDownloadInfo> DownloadBlob(BlobClient blob) 
         {   
             // Download blob information
@@ -18,6 +22,10 @@ namespace NLPService
             return download;
         }
 
+        /**
+         * Method which identifies the type of content of the blob document.
+         * blob: client of blob document from the object storage.
+         */
         public static string GetBlobType(BlobClient blob)
         {
             // Get the blob properties
@@ -27,6 +35,10 @@ namespace NLPService
             return type;
         }
 
+        /**
+         * Method which extract the text from a pdf, word or plain text file
+         * blob_url: azure blob storage document url.
+         */
         public static string GetBlobText(string blob_url) 
         {
             // Create a new blob client
@@ -92,6 +104,10 @@ namespace NLPService
             }
         }
 
+        /**
+         * Methods in charge of serializing the blob document
+         * blob: blob document object to serialize
+         */
         public static string SerializeBlob(Blob blob)
         {
             // Serialize the Blob object
