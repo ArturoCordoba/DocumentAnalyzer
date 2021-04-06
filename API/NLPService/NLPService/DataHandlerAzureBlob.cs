@@ -9,7 +9,7 @@ using Azure.Storage.Blobs.Models;
 
 namespace NLPService
 {
-    class DataHandler
+    class DataHandlerAzureBlob
     {
         /**
          * Methods which downloads the blob document from the azure blob storage.
@@ -81,7 +81,7 @@ namespace NLPService
                 return file_path;
             }
             // Creates a plain text file with the blob info
-            else if (blob_type.Equals("text/plain"))
+            else if (blob_type.Equals("text/plain") || blob_type.Equals("application/octet-stream"))
             {
                 // Create a temporary plain text file
                 string file_path = AppDomain.CurrentDomain.BaseDirectory + @"\file.txt";

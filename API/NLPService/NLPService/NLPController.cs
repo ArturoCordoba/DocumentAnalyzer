@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using DataHandlerMongoDB.Repository;
+using DataHandlerMongoDB.Model;
+using DataHandlerMongoDB.Factory;
+using DataHandlerMongoDB.Configuration;
+using FileMongo = DataHandlerMongoDB.Model.File;
 
 
 namespace NLPService
@@ -80,12 +85,28 @@ namespace NLPService
             // Obtain the blob title
             string blob_title = blob_url.Replace("https://soafiles.blob.core.windows.net/files/", "");
             // Create an empty list of references
-            List<Employee> blob_references = new List<Employee>();
+            List<Reference> blob_references = new List<Reference>();
             // Create a new Document object with the metadata
             var blob = new Blob(blob_title, blob_url, blob_references, blob_owner, false);
             // Enqueue the new blob
             EnqueueBlob(blob);
             Console.WriteLine("Documento agregado...");
+            Console.WriteLine(" ");
+
+            // Create the mongo database file
+            FileMongo file = new FileMongo();
+            file.Title = blob.Title;
+            file.Url = blob.Url;
+            file.References = blob.References.ToArray();
+            file.Owner = int.Parse(blob.Owner);
+            file.Status = false;
+
+            // Insert the document into the database
+            DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
+            DataHandlerMongoDBConfig.Config.DataBaseName = "DB_Test";
+            IMongoRepositoryFactory factory = new MongoRepositoryFactory();
+            IMongoRepository<FileMongo> repository = factory.Create<FileMongo>();
+            repository.InsertOne(file);
         }
 
         /**
@@ -98,10 +119,11 @@ namespace NLPService
                 // Dequeue a new blob
                 Blob blob = DequeueBlob();
                 Console.WriteLine("Documento extraido...");
+                Console.WriteLine(" ");
 
                 Console.WriteLine("Analizando documento...");
                 // Download the blob file
-                string blob_file = DataHandler.GetBlobText(blob.Url);
+                string blob_file = DataHandlerAzureBlob.GetBlobText(blob.Url);
                 // Obtain the blob file text
                 string text = FileHandler.GetBlobText(blob_file);
                 // Obtain the text references/entities
@@ -109,8 +131,22 @@ namespace NLPService
                 
                 // Print the recognized employees
                 for (int i = 0; i < blob.References.Count; i++)
-                    Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Quantity);
+                    Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Qty);
+
+                Console.WriteLine(" ");
+
+
+                // Update the document in the database
+                DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
+                DataHandlerMongoDBConfig.Config.DataBaseName = "DB_Test";
+                IMongoRepositoryFactory factory = new MongoRepositoryFactory();
+                IMongoRepository<FileMongo> repository = factory.Create<FileMongo>();
+                FileMongo update = repository.FindOne(file => file.Title == blob.Title && file.Owner == int.Parse(blob.Owner));
+                update.References = blob.References.ToArray();
+                update.Status = true;
+                repository.ReplaceOne(update);
             }
+
         }
 
         /**
@@ -118,6 +154,7 @@ namespace NLPService
          */
         public void TestThread()
         {
+            string url0 = "https://soafiles.blob.core.windows.net/files/Dise_o_Proyecto_3___Arquitectura_de_Computadores_I.pdf";
             // Blob url of the first document
             string url1 = "https://soafiles.blob.core.windows.net/files/prueba.txt";
             // Blob url of the second document
@@ -125,26 +162,16 @@ namespace NLPService
             // Blob url of the third document
             string url3 = "https://soafiles.blob.core.windows.net/files/prueba.pdf";
             // Blob owner of the documents
-            string owner = "Fabian";
+            int owner = 69;
 
-            /*
-            while (true)
-            {
-                Thread.Sleep(3000);
-                AddDocument(url1, owner);
-                Thread.Sleep(5000);
-                AddDocument(url2, owner);
-                Thread.Sleep(4000);
-                AddDocument(url3, owner);
-            }
-            */
 
+            AddDocument(url0, owner.ToString());
             // Adds the first document to the queue
-            AddDocument(url1, owner);
+            AddDocument(url1, owner.ToString());
             // Adds the second document to the queue
-            AddDocument(url2, owner);
+            AddDocument(url2, owner.ToString());
             // Adds the third document to the queue
-            AddDocument(url3, owner);
+            AddDocument(url3, owner.ToString());
         }
 
         /**
@@ -167,3 +194,4 @@ namespace NLPService
         }
     }
 }
+
