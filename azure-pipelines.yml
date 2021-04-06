@@ -15,6 +15,11 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Restore dependencies'
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+- task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
