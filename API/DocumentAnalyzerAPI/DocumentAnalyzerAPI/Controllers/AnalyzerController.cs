@@ -58,7 +58,8 @@ namespace DocumentAnalyzerAPI.Controllers
             NotificationData data = JsonConvert.DeserializeObject<NotificationData>(body);
 
             // Process document
-            string nlpResult = NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner.ToString()); // Database insertion of result is done within the NLP Service.
+            //string nlpResult = NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner.ToString()); // Database insertion of result is done within the NLP Service.
+            NLPService.NLPController.Instance.AddDocument(data.Url, data.Owner.ToString());
             //FileMongo result = JsonConvert.DeserializeObject<FileMongo>(nlpResult);
             //mongo_repository.InsertOne(result);
             List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
