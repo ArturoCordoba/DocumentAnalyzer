@@ -121,7 +121,6 @@ namespace NLPService
                 Console.WriteLine("Documento extraido...");
                 Console.WriteLine(" ");
 
-                Console.WriteLine("Analizando documento...");
                 // Download the blob file
                 string blob_file = DataHandlerAzureBlob.GetBlobText(blob.Url);
                 // Obtain the blob file text

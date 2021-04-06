@@ -10,7 +10,8 @@ namespace Test
          * Test thread to add documents to the queue
          */
         public static void TestThread()
-        {
+        {   
+            // Blob url of the large document
             //string url0 = "https://soafiles.blob.core.windows.net/files/Dise_o_Proyecto_3___Arquitectura_de_Computadores_I.pdf";
             // Blob url of the first document
             string url1 = "https://soafiles.blob.core.windows.net/files/prueba.txt";
@@ -21,7 +22,7 @@ namespace Test
             // Blob owner of the documents
             int owner = 69;
 
-
+            // Adds the large document to the queue
             //NLPController.Instance.AddDocument(url0, owner.ToString());
             // Adds the first document to the queue
             NLPController.Instance.AddDocument(url1, owner.ToString());
@@ -29,12 +30,11 @@ namespace Test
             NLPController.Instance.AddDocument(url2, owner.ToString());
             // Adds the third document to the queue
             NLPController.Instance.AddDocument(url3, owner.ToString());
+            
         }
         
-        /**
-         * Method which starts the threads of the NLP service
-         */
-        public static void StartService()
+
+        static void Main(string[] args)
         {
             // Creates the thread that analyzes the documents in queue
             Thread analyze_thread = new Thread(new ThreadStart(NLPController.Instance.AnalyzeDocument));
@@ -48,12 +48,7 @@ namespace Test
             analyze_thread.Join();
             // Waits for the test thread to finish
             test_thread.Join();
-        }
-        
 
-        static void Main(string[] args)
-        {
-            StartService();
             Console.Write("Press any key to exit.");
             Console.ReadKey();
         }

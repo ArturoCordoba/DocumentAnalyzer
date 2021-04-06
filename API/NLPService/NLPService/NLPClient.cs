@@ -25,7 +25,7 @@ namespace NLPService
             List<Reference> entities = new List<Reference>();
             // Maximun length of text
             int maxSize = 5000;
-
+            Console.WriteLine("Analizando documento...");
             Console.WriteLine("Largo del texto {0}", document.Length);
 
             if (document.Length > maxSize)
