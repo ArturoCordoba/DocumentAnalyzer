@@ -103,7 +103,7 @@ namespace NLPService
 
             // Insert the document into the database
             DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
-            DataHandlerMongoDBConfig.Config.DataBaseName = "DB_Test";
+            DataHandlerMongoDBConfig.Config.DataBaseName = "DocAnalyzerEntities";
             IMongoRepositoryFactory factory = new MongoRepositoryFactory();
             IMongoRepository<FileMongo> repository = factory.Create<FileMongo>();
             repository.InsertOne(file);
@@ -138,7 +138,7 @@ namespace NLPService
 
                 // Update the document in the database
                 DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
-                DataHandlerMongoDBConfig.Config.DataBaseName = "DB_Test";
+                DataHandlerMongoDBConfig.Config.DataBaseName = "DocAnalyzerEntities";
                 IMongoRepositoryFactory factory = new MongoRepositoryFactory();
                 IMongoRepository<FileMongo> repository = factory.Create<FileMongo>();
                 FileMongo update = repository.FindOne(file => file.Title == blob.Title && file.Owner == int.Parse(blob.Owner));
@@ -146,52 +146,8 @@ namespace NLPService
                 update.Status = true;
                 repository.ReplaceOne(update);
             }
-
-        }
-
-        /**
-         * Test thread to add documents to the queue
-         */
-        public void TestThread()
-        {
-            string url0 = "https://soafiles.blob.core.windows.net/files/Dise_o_Proyecto_3___Arquitectura_de_Computadores_I.pdf";
-            // Blob url of the first document
-            string url1 = "https://soafiles.blob.core.windows.net/files/prueba.txt";
-            // Blob url of the second document
-            string url2 = "https://soafiles.blob.core.windows.net/files/prueba.docx";
-            // Blob url of the third document
-            string url3 = "https://soafiles.blob.core.windows.net/files/prueba.pdf";
-            // Blob owner of the documents
-            int owner = 69;
-
-
-            AddDocument(url0, owner.ToString());
-            // Adds the first document to the queue
-            AddDocument(url1, owner.ToString());
-            // Adds the second document to the queue
-            AddDocument(url2, owner.ToString());
-            // Adds the third document to the queue
-            AddDocument(url3, owner.ToString());
-        }
-
-        /**
-         * Method which starts the threads of the NLP service
-         */
-        public void StartService()
-        {
-            // Creates the thread that analyzes the documents in queue
-            Thread analyze_thread = new Thread(new ThreadStart(AnalyzeDocument));
-            // Creates the test thread to add documents into the queue
-            Thread test_thread = new Thread(new ThreadStart(TestThread));
-            // Starts the analyzer thread
-            analyze_thread.Start();
-            // Starts the test thread
-            test_thread.Start();
-            // Waits for the analyzer thread to finish
-            analyze_thread.Join();
-            // Waits for the test thread to finish
-            test_thread.Join();
         }
     }
 }
+
 

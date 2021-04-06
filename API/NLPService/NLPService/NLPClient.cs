@@ -30,7 +30,6 @@ namespace NLPService
 
             if (document.Length > maxSize)
             {
-                //string sentence = "Fabian Gonzalez esta en la casa de Arturo Cordoba porque Marcelo Sanchez lo invito y a Daniel Montoya y tambien Fabian Gonzalez.";
                 string[] words = document.Split(' ');
                 var parts = new Dictionary<int, string>();
                 string part = string.Empty;
