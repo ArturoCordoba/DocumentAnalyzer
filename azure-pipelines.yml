@@ -13,9 +13,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreCLI@2
+- task: UseDotNet@2
   inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--no-restore'
-  displayName: 'Build projects'
+    version: '5.0.x'
+    includePreviewVersions: true # Required for preview versions
