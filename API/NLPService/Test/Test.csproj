@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.AI.TextAnalytics" Version="5.0.0" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.1" />
-    <PackageReference Include="Spire.Office" Version="6.3.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NLPService\NLPService.csproj" />
   </ItemGroup>
 

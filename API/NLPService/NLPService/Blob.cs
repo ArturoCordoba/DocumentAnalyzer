@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using DataHandlerMongoDB.Model;
 
-
-
 namespace NLPService
 {
     public class Blob

@@ -3,7 +3,6 @@ using System.Text;
 using Spire.Pdf;
 using Spire.Doc;
 
-
 namespace NLPService
 {
     public class FileHandler
@@ -49,7 +48,7 @@ namespace NLPService
         public static string GetTextFromTxt(string file_path)
         {   
             // Creates a strubg with all text from the plain text file
-            string text = System.IO.File.ReadAllText(file_path);
+            string text = File.ReadAllText(file_path);
             return text.ToString();
         }
 

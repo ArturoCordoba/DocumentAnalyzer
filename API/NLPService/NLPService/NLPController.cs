@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using DataHandlerAzureBlob;
 using DataHandlerMongoDB.Repository;
 using DataHandlerMongoDB.Model;
 using DataHandlerMongoDB.Factory;
@@ -121,8 +122,9 @@ namespace NLPService
                 Console.WriteLine("Documento extraido...");
                 Console.WriteLine(" ");
 
+
                 // Download the blob file
-                string blob_file = DataHandlerAzureBlob.GetBlobText(blob.Url);
+                string blob_file = BlobHandler.GetBlobText(blob.Url);
                 // Obtain the blob file text
                 string text = FileHandler.GetBlobText(blob_file);
                 // Obtain the text references/entities
@@ -131,9 +133,7 @@ namespace NLPService
                 // Print the recognized employees
                 for (int i = 0; i < blob.References.Count; i++)
                     Console.WriteLine(blob.References[i].Name + " " + blob.References[i].Qty);
-
                 Console.WriteLine(" ");
-
 
                 // Update the document in the database
                 DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
