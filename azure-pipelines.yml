@@ -21,8 +21,7 @@ steps:
     includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'Restore dependencies'
+  displayName: 'Build Project'
   inputs:
-    command: 'restore'
+    command: 'build'
     projects: '**/*.csproj'
-    feedsToUse: 'select'
