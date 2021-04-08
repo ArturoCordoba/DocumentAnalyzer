@@ -18,9 +18,8 @@ steps:
     version: '5.0.x'
     includePreviewVersions: true
     performMultiLevelLookup: true
-
 - task: DotNetCoreCLI@2
-  displayName: Build
   inputs:
     command: 'build'
     projects: '**/*.csproj'
+
