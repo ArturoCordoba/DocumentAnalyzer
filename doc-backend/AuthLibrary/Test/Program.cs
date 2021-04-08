@@ -1,11 +1,9 @@
 ﻿using System;
-using AuthLibrary;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 
 using AuthLibrary.Configuration;
 using AuthLibrary.Factory;
 
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace Test
@@ -22,11 +20,14 @@ namespace Test
             IAuthServiceFactory authFactory = new AuthServiceFactory();
 
             string email = "test@email.company.com";
-            string correctEmail = "test@email.company.com";
-            string password = "fsifjosf";
-            string correctPassword = "fsifjosf";
+            string id = "4";
 
-            string token = authFactory.Authentication.Authenticate(email, password, correctEmail, correctPassword);
+            var tokenClaims = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>(ClaimTypes.Email, email),
+                new KeyValuePair<string, string>(ClaimTypes.NameIdentifier, id)
+            };
+
+            string token = authFactory.TokenGenerator.GenerateToken(tokenClaims);
 
             Console.WriteLine(token);
 
