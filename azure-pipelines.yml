@@ -14,13 +14,15 @@ variables:
 
 steps:
 - task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
   inputs:
-    version: '5.0.x'
-    includePreviewVersions: true
+    version: 5.0.x
     performMultiLevelLookup: true
+    includePreviewVersions: true
+
 - task: DotNetCoreCLI@2
+  displayName: 'Restore dependencies'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
     feedsToUse: 'select'
-
