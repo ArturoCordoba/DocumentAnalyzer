@@ -21,8 +21,17 @@ steps:
     includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
+  displayName: 'Restore dependencies'
   inputs:
     command: 'restore'
-    projects: 'API\NLPService\NLPService*.csproj'
+    projects: '**/*.csproj'
     feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build projects'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+
 
