@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AuthLibrary.Authorization;
-using AuthLibrary.Authentication;
+using AuthLibrary.Token;
 
 namespace AuthLibrary.Factory
 {
@@ -13,6 +13,6 @@ namespace AuthLibrary.Factory
     {
         public IAuthorizationService Authorization { get; }
 
-        public IAuthenticationService Authentication { get; }
+        public ITokenGenerator TokenGenerator { get; }
     }
 }
