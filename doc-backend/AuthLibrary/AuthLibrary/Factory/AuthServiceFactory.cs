@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using AuthLibrary.Configuration;
 using AuthLibrary.Authorization;
-using AuthLibrary.Authentication;
 using AuthLibrary.Token;
 
 namespace AuthLibrary.Factory
@@ -19,7 +18,7 @@ namespace AuthLibrary.Factory
         private int expirationTime;
 
         private IAuthorizationService _Authorization = null;
-        private IAuthenticationService _Authentication = null;
+        private ITokenGenerator _TokenGenerator = null;
 
         public AuthServiceFactory()
         {
@@ -55,28 +54,27 @@ namespace AuthLibrary.Factory
         }
 
         /// <summary>
-        /// Method to obtain an Authentication Service
+        /// Method to obtain a Token Generator
         /// </summary>
-        /// <returns>Authentication Service</returns>
-        public IAuthenticationService Authentication
+        /// <returns>Token Generator</returns>
+        public ITokenGenerator TokenGenerator
         {
             get
             {
-                return _Authentication ??= buildAuthenticationService();
+                return _TokenGenerator ??= buildTokenGenerator();
             }
         }
 
         /// <summary>
-        /// Method to build an IAuthenticationService
+        /// Method to build a ITokenGenerator
         /// </summary>
-        /// <returns>IAuthenticationService</returns>
-        private IAuthenticationService buildAuthenticationService()
+        /// <returns>ITokenGenerator</returns>
+        private ITokenGenerator buildTokenGenerator()
         {
             // Creation of the token generator
             ITokenGenerator tokenGenerator = new TokenGenerator(secretKey, issuerToken, expirationTime);
 
-            // Creation of the Authentication Service
-            return new AuthenticationService(tokenGenerator);
+            return tokenGenerator;
         }
     }
 }
