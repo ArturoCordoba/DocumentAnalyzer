@@ -183,7 +183,7 @@ namespace DocumentASnalyzerAPI.Models
                     if(docRef.EmployeeId == emp.EmployeeId) currentCount += docRef.Ocurrences;
                     
                 }
-                result.Add(new EmployeeCount(e.mp.FullName, currentCount));
+                result.Add(new EmployeeCount(emp.FullName, currentCount));
             }
             return result;
         }
