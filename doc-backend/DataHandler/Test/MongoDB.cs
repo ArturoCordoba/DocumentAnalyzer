@@ -18,9 +18,10 @@ namespace Test
     class MongoDB
     {
         
-        /*static void Main(string[] args)
+        static void Main(string[] args)
         {
-            DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
+            Console.WriteLine("Main");
+            /*DataHandlerMongoDBConfig.Config.ConnectionString = "mongodb://localhost:27017";
             DataHandlerMongoDBConfig.Config.DataBaseName = "DocAnalyzer";
 
             IMongoRepositoryFactory repositoryFactory = new MongoRepositoryFactory();
@@ -49,7 +50,7 @@ namespace Test
             foreach (File file in files)
             {
                 Console.WriteLine(file.Status);
-            }
-        }*/
+            }*/
+        }
     }
 }
