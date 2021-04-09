@@ -14,7 +14,7 @@ namespace DocumentASnalyzerAPI.Models
 {
     public class EmployeeFinder
     {
-        public static List<Match> FindEmployeeReferences(NotificationData req, 
+        public static List<Match> FindEmployeeReferences(NotificationData req,
                                                          IMongoRepository<FileMongo> repository,
                                                          IUnitOfWork unit_of_work)
         {
@@ -23,14 +23,15 @@ namespace DocumentASnalyzerAPI.Models
             List<Employee> employeeList = employeeRepo.Get().ToList();
             List<Match> employeesIdentified = new List<Match>();
 
-            foreach(FileMongo file in userFiles)
+            foreach (FileMongo file in userFiles)
             {
-                foreach(Reference fileRef in file.References)
+                // todo: if file has not been processed by me 
+                foreach (Reference fileRef in file.References)
                 {
                     (bool, int, string) isReferenced = IsEmployeeReferenced(employeeList, fileRef.Name);
                     if (isReferenced.Item1)
                     {
-                        employeesIdentified.Add(new Match(isReferenced.Item3, fileRef.Qty, isReferenced.Item2));
+                        employeesIdentified.Add(new Match(isReferenced.Item3, file.Id.ToString(), fileRef.Qty, isReferenced.Item2));
                     }
                 }
             }
@@ -81,11 +82,11 @@ namespace DocumentASnalyzerAPI.Models
         private static int CountEmployeeOccurrences(string[] employeeSplit, List<Employee> employeeLst)
         {
             int count = 0;
-            foreach(Employee employee in employeeLst)
+            foreach (Employee employee in employeeLst)
             {
                 string[] currentEmployee = employee.FullName.ToLower().Split(' ');
 
-                if(currentEmployee.First().Equals(employeeSplit.First()) && currentEmployee[1].Equals(employeeSplit[1]))
+                if (currentEmployee.First().Equals(employeeSplit.First()) && currentEmployee[1].Equals(employeeSplit[1]))
                 {
                     // compare first name and first last name.
                     count++;
@@ -98,29 +99,28 @@ namespace DocumentASnalyzerAPI.Models
         {
             List<FileMongo> userFiles = repository.FilterBy(file => file.Owner == employeeId).ToList();
             List<UserDocument> result = new List<UserDocument>();
-            
-            foreach(FileMongo file in userFiles)
+
+            foreach (FileMongo file in userFiles)
             {
-                result.Add(new UserDocument(file.Title, file.Status));
+                result.Add(new UserDocument(file.Title, file.Id.ToString(), file.Status));
             }
             return result;
         }
 
         public static void AddUserReferences(List<Match> processingResult,
-                                             NotificationData req,
                                              IUnitOfWork unit_of_work)
         {
             IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
             List<EmployeeReferenceByDocument> userRefs = referencesRepo.Get().ToList();
 
-            foreach(Match match in processingResult)
+            foreach (Match match in processingResult)
             {
                 EmployeeReferenceByDocument newMatch = new EmployeeReferenceByDocument();
-                newMatch.DocumentId = req.Title;
+                newMatch.DocumentId = match.documentId;
                 newMatch.EmployeeId = match.employeeId;
                 newMatch.Ocurrences = match.qty;
 
-                if (!ReferenceExists(userRefs, match.employeeId, req.Title))
+                if (!ReferenceExists(userRefs, match.employeeId, match.documentId))
                 {
                     referencesRepo.Insert(newMatch);
                 } else
@@ -140,7 +140,7 @@ namespace DocumentASnalyzerAPI.Models
             return false;
         }
 
-        public static string GetDocumentReferences(ResultRequest req, IUnitOfWork unit_of_work)
+        public static string GetDocumentReferences(List<UserDocument> userDocs, IUnitOfWork unit_of_work)
         {
             IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
             IRepository<Employee> empRepo = unit_of_work.GetRepository<Employee>();
@@ -148,19 +148,44 @@ namespace DocumentASnalyzerAPI.Models
             List<Reference> docReferences = new List<Reference>();
 
 
-            foreach(EmployeeReferenceByDocument docRef in userRefs)
+            foreach (EmployeeReferenceByDocument docRef in userRefs)
             {
-                if(docRef.DocumentId.Equals(req.Title))
+                foreach (UserDocument uDoc in userDocs)
                 {
-                    Employee emp = empRepo.GetById(docRef.EmployeeId);
-                    Reference newRef = new Reference();
-                    newRef.Name = emp.FullName;
-                    newRef.Qty = (int) docRef.Ocurrences;
-                    docReferences.Add(newRef);
-                } 
+                    if (docRef.DocumentId.Equals(uDoc.DocumentId))
+                    {
+                        Employee emp = empRepo.GetById(docRef.EmployeeId);
+                        Reference newRef = new Reference();
+                        newRef.Name = emp.FullName;
+                        newRef.Qty = (int)docRef.Ocurrences;
+                        uDoc.UserDocumentReferences.Add(newRef);
+                    }
+                }
             }
 
-            return System.Text.Json.JsonSerializer.Serialize(docReferences);
+            return System.Text.Json.JsonSerializer.Serialize(userDocs);
+        }
+
+        public static List<EmployeeCount> GetEmployeeGlobalCounter(IUnitOfWork unit_of_work)
+        {
+            IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
+            List<EmployeeReferenceByDocument> userRefs = referencesRepo.Get().ToList();
+            IRepository<Employee> empRepo = unit_of_work.GetRepository<Employee>();
+            List<Employee> employeeList = empRepo.Get().ToList();
+
+            List<EmployeeCount> result = new List<EmployeeCount>();
+
+            foreach (Employee emp in employeeList) 
+            {
+                int? currentCount = 0;
+                foreach(EmployeeReferenceByDocument docRef in userRefs)
+                {
+                    if(docRef.EmployeeId == emp.EmployeeId) currentCount += docRef.Ocurrences;
+                    
+                }
+                result.Add(new EmployeeCount(e.mp.FullName, currentCount));
+            }
+            return result;
         }
     }
 }

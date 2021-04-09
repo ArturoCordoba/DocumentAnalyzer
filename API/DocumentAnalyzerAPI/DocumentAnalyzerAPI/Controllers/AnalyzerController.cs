@@ -22,6 +22,8 @@ using System.Text.Json.Serialization;
 
 namespace DocumentAnalyzerAPI.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AnalyzerController : Controller
     {
         private static IMongoRepository<FileMongo> mongo_repository;
@@ -34,13 +36,13 @@ namespace DocumentAnalyzerAPI.Controllers
         }
 
         [HttpPost, Route("/documents/notify/")]
-        public IActionResult NotifyDocument() 
+        public IActionResult NotifyDocument()
         {
-            /* Receives a JSON [body] = {"owner": Integer, 
-             *                           "url":"https://soafiles.blob.core.windows.net/files/...",
-             *                           "title": String}
-             * 
-             * 
+            /* Receives a JSON [body] = {"url":"https://soafiles.blob.core.windows.net/files/...",
+             *                           "title": String
+             *                           "owner": Integer}
+             *                           
+             * Owner: Integer (from header token)
              */
 
             // Necessary to read the request's body
@@ -58,57 +60,42 @@ namespace DocumentAnalyzerAPI.Controllers
             NotificationData data = JsonConvert.DeserializeObject<NotificationData>(body);
 
             // Process document
-            //string nlpResult = NLPService.NLPController.AnalyzeDocument(data.Url, data.Owner.ToString()); // Database insertion of result is done within the NLP Service.
             NLPService.NLPController.Instance.AddDocument(data.Url, data.Owner.ToString());
             //FileMongo result = JsonConvert.DeserializeObject<FileMongo>(nlpResult);
             //mongo_repository.InsertOne(result);
-            List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
-            string jsonResult = System.Text.Json.JsonSerializer.Serialize(processingResults);
+            string jsonResult = String.Empty;
 
-            EmployeeFinder.AddUserReferences(processingResults, data, unit_of_work);
+            List<Match> processingResults = new List<Match>();
+
+            while(processingResults.Count == 0)
+            {
+                processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
+                jsonResult = System.Text.Json.JsonSerializer.Serialize(processingResults);
+            }
+                
+            EmployeeFinder.AddUserReferences(processingResults, unit_of_work);
 
             return Ok(jsonResult);
         }
 
+        
+
         [HttpGet, Route("/documents/user={user_id}/")]
         public IActionResult GetUserDocuments([FromRoute(Name = "user_id")] int id)
         {
-            // Finds documents associated with employee
             List<UserDocument> userFiles = EmployeeFinder.FindEmployeeDocuments(id, mongo_repository);
-            // Serialize results into a JSON string
-            string jsonFiles = System.Text.Json.JsonSerializer.Serialize(userFiles);
-            /*
-             * Returns JSON File = [{"Title":..., "Status":...}, {"Title":..., "Status":...}, ...]
+            string result = EmployeeFinder.GetDocumentReferences(userFiles, unit_of_work);
+
+            /* Returns JSON [{"Title": String,"Status": Boolean,"DocumentId": String,"UserDocumentReferences":[{"Name":String,"Qty":Integer},{"Name":String,"Qty":Integer}, ...]}]
              */
-            return Ok(jsonFiles);
+            return Ok(result);
         }
 
-        [HttpGet, Route("/documents/results/")]
-        public IActionResult GetProcessingResult()
+        [HttpGet, Route("/documents/users/count")]
+        public IActionResult GetUserGlobalCount()
         {
-
-            /*
-             * Receives body JSON = {"Owner":Integer, "Title": String}
-             * 
-             * */
-
-            AllowSync();
-
-            var body = String.Empty;
-
-            
-            using (var reader = new StreamReader(Request.Body))
-            {
-                body = reader.ReadToEnd();
-            }
-
-            ResultRequest req = System.Text.Json.JsonSerializer.Deserialize<ResultRequest>(body);
-
-            /*
-             * Returns JSON = [{"Name":String, "Qty":Integer, "employeeId": Integer}, {"Name":String, "Qty":Integer, "employeeId": Integer}, ...]
-             * */
-    
-            return Ok(EmployeeFinder.GetDocumentReferences(req, unit_of_work));
+            List<EmployeeCount>  counts = EmployeeFinder.GetEmployeeGlobalCounter(unit_of_work);
+            return Ok(System.Text.Json.JsonSerializer.Serialize(counts));
         }
 
         private void AllowSync()
