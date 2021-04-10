@@ -17,8 +17,6 @@ using DataHandlerSQL.Factory;
 using DataHandlerSQL.Repository;
 using DataHandlerSQL.Model;
 using DocumentASnalyzerAPI.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace DocumentAnalyzerAPI.Controllers
 {
@@ -45,25 +43,15 @@ namespace DocumentAnalyzerAPI.Controllers
              * Owner: Integer (from header token)
              */
 
-            // Process document
             NLPService.NLPController.Instance.AddDocument(data.Url, data.Owner.ToString());
-            //FileMongo result = JsonConvert.DeserializeObject<FileMongo>(nlpResult);
-            //mongo_repository.InsertOne(result);
-            string jsonResult = String.Empty;
-
-            List<Match> processingResults = new List<Match>();
 
             IUnitOfWork unit_of_work = uow_factory.Create();
 
-            while(processingResults.Count == 0)
-            {
-                processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
-                jsonResult = System.Text.Json.JsonSerializer.Serialize(processingResults);
-            }
-                
+            List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
+
             EmployeeFinder.AddUserReferences(processingResults, unit_of_work);
 
-            return Ok(jsonResult);
+            return Ok();          
         }
 
         
@@ -74,9 +62,9 @@ namespace DocumentAnalyzerAPI.Controllers
             IUnitOfWork unit_of_work = uow_factory.Create();
 
             List<UserDocument> userFiles = EmployeeFinder.FindEmployeeDocuments(id, mongo_repository);
-            string result = EmployeeFinder.GetDocumentReferences(userFiles, unit_of_work);
+            List<UserDocument> result = EmployeeFinder.GetDocumentReferences(userFiles, unit_of_work);
 
-            /* Returns JSON [{"Title": String,"Status": Boolean,"DocumentId": String,"UserDocumentReferences":[{"Name":String,"Qty":Integer},{"Name":String,"Qty":Integer}, ...]}]
+            /* Returns JSON [{"Title": String,"Status": Boolean, "Url": String,"UserDocumentReferences":[{"Name":String,"Qty":Integer},{"Name":String,"Qty":Integer}, ...]}]
              */
             return Ok(result);
         }
@@ -86,8 +74,8 @@ namespace DocumentAnalyzerAPI.Controllers
         {
             IUnitOfWork unit_of_work = uow_factory.Create();
 
-            List<EmployeeCount>  counts = EmployeeFinder.GetEmployeeGlobalCounter(unit_of_work);
-            return Ok(System.Text.Json.JsonSerializer.Serialize(counts));
+            List<EmployeeCount>  counts = EmployeeFinder.GetEmployeeGlobalCounter(unit_of_work, mongo_repository);
+            return Ok(counts);
         }
 
         private void AllowSync()

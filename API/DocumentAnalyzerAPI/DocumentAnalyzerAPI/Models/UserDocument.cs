@@ -8,17 +8,19 @@ namespace DocumentAnalyzerAPI.Models
 {
     public class UserDocument
     {
-        public UserDocument(string name, string docId, bool status)
+        public UserDocument(string name, string url, string id, bool status)
         {
             Title = name;
             Status = status;
-            DocumentId = docId;
+            Url = url;
+            DocId = id;
             UserDocumentReferences = new List<Reference>();
         } 
 
         public string Title { get; set; }
         public bool Status { get; set; }
-        public string DocumentId { get; set; }
+        public string Url { get; set; }
+        public string DocId { get; set; }
 
         public List<Reference> UserDocumentReferences { get; set; }
     }

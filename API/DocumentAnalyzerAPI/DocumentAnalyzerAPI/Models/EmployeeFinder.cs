@@ -18,23 +18,25 @@ namespace DocumentASnalyzerAPI.Models
                                                          IMongoRepository<FileMongo> repository,
                                                          IUnitOfWork unit_of_work)
         {
-            List<FileMongo> userFiles = repository.FilterBy(file => file.Title == req.Title && file.Owner == req.Owner).ToList();
+            FileMongo userFile = repository.FilterBy(file => file.Title == req.Title && file.Owner == req.Owner).ToList().First();
+
+            while(!userFile.Status)
+            {
+                userFile = repository.FilterBy(file => file.Title == req.Title && file.Owner == req.Owner).ToList().First();
+            }
+
             IRepository<Employee> employeeRepo = unit_of_work.GetRepository<Employee>();
             List<Employee> employeeList = employeeRepo.Get().ToList();
             List<Match> employeesIdentified = new List<Match>();
-
-            foreach (FileMongo file in userFiles)
+ 
+            foreach (Reference fileRef in userFile.References)
             {
-                // todo: if file has not been processed by me 
-                foreach (Reference fileRef in file.References)
+                (bool, int, string) isReferenced = IsEmployeeReferenced(employeeList, fileRef.Name);
+                if (isReferenced.Item1)
                 {
-                    (bool, int, string) isReferenced = IsEmployeeReferenced(employeeList, fileRef.Name);
-                    if (isReferenced.Item1)
-                    {
-                        employeesIdentified.Add(new Match(isReferenced.Item3, file.Id.ToString(), fileRef.Qty, isReferenced.Item2));
-                    }
+                    employeesIdentified.Add(new Match(isReferenced.Item3, userFile.Id.ToString(), fileRef.Qty, isReferenced.Item2));
                 }
-            }
+            }            
             return employeesIdentified;
         }
 
@@ -102,7 +104,7 @@ namespace DocumentASnalyzerAPI.Models
 
             foreach (FileMongo file in userFiles)
             {
-                result.Add(new UserDocument(file.Title, file.Id.ToString(), file.Status));
+                result.Add(new UserDocument(file.Title, file.Url, file.Id.ToString(), file.Status));
             }
             return result;
         }
@@ -140,7 +142,7 @@ namespace DocumentASnalyzerAPI.Models
             return false;
         }
 
-        public static string GetDocumentReferences(List<UserDocument> userDocs, IUnitOfWork unit_of_work)
+        public static List<UserDocument> GetDocumentReferences(List<UserDocument> userDocs, IUnitOfWork unit_of_work)
         {
             IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
             IRepository<Employee> empRepo = unit_of_work.GetRepository<Employee>();
@@ -152,7 +154,7 @@ namespace DocumentASnalyzerAPI.Models
             {
                 foreach (UserDocument uDoc in userDocs)
                 {
-                    if (docRef.DocumentId.Equals(uDoc.DocumentId))
+                    if (docRef.DocumentId.Equals(uDoc.DocId))
                     {
                         Employee emp = empRepo.GetById(docRef.EmployeeId);
                         Reference newRef = new Reference();
@@ -163,10 +165,10 @@ namespace DocumentASnalyzerAPI.Models
                 }
             }
 
-            return System.Text.Json.JsonSerializer.Serialize(userDocs);
+            return userDocs;
         }
 
-        public static List<EmployeeCount> GetEmployeeGlobalCounter(IUnitOfWork unit_of_work)
+        public static List<EmployeeCount> GetEmployeeGlobalCounter(IUnitOfWork unit_of_work, IMongoRepository<FileMongo> mongo_repo)
         {
             IRepository<EmployeeReferenceByDocument> referencesRepo = unit_of_work.GetRepository<EmployeeReferenceByDocument>();
             List<EmployeeReferenceByDocument> userRefs = referencesRepo.Get().ToList();
@@ -178,12 +180,21 @@ namespace DocumentASnalyzerAPI.Models
             foreach (Employee emp in employeeList) 
             {
                 int? currentCount = 0;
+                List<Reference> userDocs = new List<Reference>();
                 foreach(EmployeeReferenceByDocument docRef in userRefs)
                 {
-                    if(docRef.EmployeeId == emp.EmployeeId) currentCount += docRef.Ocurrences;
-                    
+                    if (docRef.EmployeeId == emp.EmployeeId)
+                    {
+                        currentCount += docRef.Ocurrences;
+
+                        FileMongo userFile = mongo_repo.FindById(docRef.DocumentId);
+                        Reference newRef = new Reference();
+                        newRef.Name = userFile.Title;
+                        newRef.Qty = (int)docRef.Ocurrences;
+                        userDocs.Add(newRef);
+                    }
                 }
-                result.Add(new EmployeeCount(emp.FullName, currentCount));
+                result.Add(new EmployeeCount(emp.FullName, currentCount, userDocs));
             }
             return result;
         }
