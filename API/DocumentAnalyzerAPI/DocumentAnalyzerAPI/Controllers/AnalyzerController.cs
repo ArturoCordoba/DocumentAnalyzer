@@ -27,16 +27,16 @@ namespace DocumentAnalyzerAPI.Controllers
     public class AnalyzerController : Controller
     {
         private static IMongoRepository<FileMongo> mongo_repository;
-        private static IUnitOfWork unit_of_work;
+        private static IUnitOfWorkFactory uow_factory;
 
         public AnalyzerController(IMongoRepositoryFactory factory, IUnitOfWorkFactory unit_factory)
         {
             mongo_repository = factory.Create<FileMongo>();
-            unit_of_work = unit_factory.Create();
+            uow_factory = unit_factory;
         }
 
         [HttpPost, Route("/documents/notify/")]
-        public IActionResult NotifyDocument()
+        public IActionResult NotifyDocument(NotificationData data)
         {
             /* Receives a JSON [body] = {"url":"https://soafiles.blob.core.windows.net/files/...",
              *                           "title": String
@@ -45,20 +45,6 @@ namespace DocumentAnalyzerAPI.Controllers
              * Owner: Integer (from header token)
              */
 
-            // Necessary to read the request's body
-            AllowSync();
-
-            var body = String.Empty;
-
-            // reads request's body
-            using (var reader = new StreamReader(Request.Body))
-            {
-                body = reader.ReadToEnd();
-            }
-
-            // serialize body into NotificationData Object
-            NotificationData data = JsonConvert.DeserializeObject<NotificationData>(body);
-
             // Process document
             NLPService.NLPController.Instance.AddDocument(data.Url, data.Owner.ToString());
             //FileMongo result = JsonConvert.DeserializeObject<FileMongo>(nlpResult);
@@ -66,6 +52,8 @@ namespace DocumentAnalyzerAPI.Controllers
             string jsonResult = String.Empty;
 
             List<Match> processingResults = new List<Match>();
+
+            IUnitOfWork unit_of_work = uow_factory.Create();
 
             while(processingResults.Count == 0)
             {
@@ -83,6 +71,8 @@ namespace DocumentAnalyzerAPI.Controllers
         [HttpGet, Route("/documents/user={user_id}/")]
         public IActionResult GetUserDocuments([FromRoute(Name = "user_id")] int id)
         {
+            IUnitOfWork unit_of_work = uow_factory.Create();
+
             List<UserDocument> userFiles = EmployeeFinder.FindEmployeeDocuments(id, mongo_repository);
             string result = EmployeeFinder.GetDocumentReferences(userFiles, unit_of_work);
 
@@ -94,6 +84,8 @@ namespace DocumentAnalyzerAPI.Controllers
         [HttpGet, Route("/documents/users/count")]
         public IActionResult GetUserGlobalCount()
         {
+            IUnitOfWork unit_of_work = uow_factory.Create();
+
             List<EmployeeCount>  counts = EmployeeFinder.GetEmployeeGlobalCounter(unit_of_work);
             return Ok(System.Text.Json.JsonSerializer.Serialize(counts));
         }
