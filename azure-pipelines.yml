@@ -20,6 +20,14 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
+    
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'soa-itcr-21'
+    scannerMode: 'MSBuild'
+    projectKey: 'soa-itcr-21_DOCUMENT-ANALYZER'
+    projectName: 'DOCUMENT ANALYZER'
 
 - task: VSBuild@1
   inputs:
@@ -38,3 +46,9 @@ steps:
     command: test
     projects: '**/*Test/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+    
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
