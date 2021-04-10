@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLPService", "NLPService\NL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{1D27F870-DBA8-43C4-9281-859F8AD46C82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentAnalyzerTests", "NLPTests\DocumentAnalyzerTests.csproj", "{E6B16443-7B10-4A11-85DF-23789873D8E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentAnalyzerTest", "NLPTests\DocumentAnalyzerTest.csproj", "{E6B16443-7B10-4A11-85DF-23789873D8E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataHandlerAzureBlob", "DataHandler\DataHandlerAzureBlob.csproj", "{4E3BB76C-FFA9-4076-A7F9-78D976B5F1BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataHandlerAzureBlob", "DataHandler\DataHandlerAzureBlob.csproj", "{4E3BB76C-FFA9-4076-A7F9-78D976B5F1BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
