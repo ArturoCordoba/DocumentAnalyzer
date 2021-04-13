@@ -79,6 +79,12 @@ namespace DocumentAnalyzerAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DocumentAnalyzerAPI v1"));
             }
 
+            // TODO: Adjust CORS settings appropriately
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseRouting();
 
             app.UseAuthentication();

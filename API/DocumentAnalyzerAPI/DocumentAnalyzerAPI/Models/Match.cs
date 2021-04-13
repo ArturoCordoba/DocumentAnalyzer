@@ -7,14 +7,17 @@ namespace DocumentAnalyzerAPI.Models
 {
     public class Match
     {
-        public Match(string empName, int quantity, int id)
+        public Match(string empName, string docId, int quantity, int id)
         {
             employeeName = empName;
             qty = quantity;
             employeeId = id;
+            documentId = docId;
         }
+
         public string employeeName { get; set; }
         public int qty { get; set; }
         public int employeeId { get; set; }
+        public string documentId { get; set; }
     }
 }

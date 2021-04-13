@@ -17,10 +17,10 @@ namespace AuthAPI.Controllers
     [Authorize]
     public class SignupController : Controller
     {
-        private readonly SignupService signupService;
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
         public SignupController(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.signupService = new SignupService(unitOfWorkFactory);
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         [HttpPost]
@@ -29,6 +29,8 @@ namespace AuthAPI.Controllers
         {
             try
             {
+                SignupService signupService = new SignupService(unitOfWorkFactory);
+
                 // Used the SigupService to determine if the request is valid
                 SignupResult result = signupService.Signup(userData);
 

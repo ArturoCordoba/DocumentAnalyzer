@@ -17,11 +17,13 @@ namespace AuthAPI.Controllers
     [Route("[controller]")]
     public class LoginController : Controller
     {
-        private readonly LoginService loginService;
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IAuthServiceFactory authServiceFactory;
 
         public LoginController(IUnitOfWorkFactory unitOfWorkFactory, IAuthServiceFactory authServiceFactory)
         {
-            loginService = new LoginService(unitOfWorkFactory, authServiceFactory);
+            this.unitOfWorkFactory = unitOfWorkFactory;
+            this.authServiceFactory = authServiceFactory;
         }
 
         [HttpPost]
@@ -30,6 +32,8 @@ namespace AuthAPI.Controllers
         {
             try
             {
+                LoginService loginService = new LoginService(unitOfWorkFactory, authServiceFactory);
+
                 // Uses the LoginService to determine if the request is valid
                 string token = loginService.Login(requestData);
 

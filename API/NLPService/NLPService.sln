@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLPService", "NLPService\NLPService.csproj", "{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLPService", "NLPService\NLPService.csproj", "{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1D27F870-DBA8-43C4-9281-859F8AD46C82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataHandlerAzureBlob", "DataHandlerAzureBlob\DataHandlerAzureBlob.csproj", "{921902F4-7601-47CB-B1AC-3B99313F15DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLPServiceTest", "NLPServiceTest\NLPServiceTest.csproj", "{13425AA6-74E6-4105-BE7A-D59A635793A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A5CC9FB-895B-4C49-97BB-4CE04F7BFBDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D27F870-DBA8-43C4-9281-859F8AD46C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921902F4-7601-47CB-B1AC-3B99313F15DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921902F4-7601-47CB-B1AC-3B99313F15DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921902F4-7601-47CB-B1AC-3B99313F15DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921902F4-7601-47CB-B1AC-3B99313F15DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13425AA6-74E6-4105-BE7A-D59A635793A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13425AA6-74E6-4105-BE7A-D59A635793A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13425AA6-74E6-4105-BE7A-D59A635793A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13425AA6-74E6-4105-BE7A-D59A635793A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
