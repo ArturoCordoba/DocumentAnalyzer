@@ -57,10 +57,17 @@ namespace AuthAPI
             /*------------------------------------------------------------------------*/
             // Configuration related to the APIAuthLibrary & AuthLibrary
             /*------------------------------------------------------------------------*/
+            /*
             AuthServiceConfig.Config.SecretKey = Configuration["TokenConfiguration:SecretKey"];
             AuthServiceConfig.Config.IssuerToken = Configuration["TokenConfiguration:IssuerToken"];
             AuthServiceConfig.Config.AuthType = Configuration["TokenConfiguration:AuthType"];
-            AuthServiceConfig.Config.ExpirationTime = Int32.Parse(Configuration["TokenConfiguration:ExpirationTime"]);
+            AuthServiceConfig.Config.ExpirationTime = int.Parse(Configuration["TokenConfiguration:ExpirationTime"]);
+            */
+
+            AuthServiceConfig.Config.SecretKey = "{.@^x[m+A-pvT#.SCb<NmbdELB3Cw94Ap>;Q4B.#";
+            AuthServiceConfig.Config.IssuerToken = "DocAnalyzerAuth";
+            AuthServiceConfig.Config.AuthType = "Bearer";
+            AuthServiceConfig.Config.ExpirationTime = 120;
 
             services.AddAuthentication("Authorized")
                 .AddScheme<AuthenticationSchemeOptions, AuthHandler>("Authorized", "Authorized", opts => { });
