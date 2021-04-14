@@ -10,13 +10,13 @@
     <PackageReference Include="AuthLibrary" Version="2.0.0" />
     <PackageReference Include="Azure.AI.TextAnalytics" Version="5.0.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.8.1" />
-    <PackageReference Include="DataHandlerAzureBlob" Version="1.0.2" />
+    <PackageReference Include="DataHandlerAzureBlob" Version="1.0.3" />
     <PackageReference Include="DataHandlerMongoDB" Version="1.0.0" />
     <PackageReference Include="DataHandlerSQL" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLPService" Version="1.0.1" />
+    <PackageReference Include="NLPService" Version="1.0.2" />
     <PackageReference Include="Spire.Office" Version="6.4.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.2" />
   </ItemGroup>
 
 </Project>
