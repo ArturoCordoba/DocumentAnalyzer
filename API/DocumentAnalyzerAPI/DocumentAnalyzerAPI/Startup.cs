@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using APIAuthLibrary;
 using AuthLibrary.Factory;
 using AuthLibrary.Configuration;
+using DataHandlerAzureBlob;
 using DataHandlerMongoDB.Configuration;
 using DataHandlerMongoDB.Factory;
 using DataHandlerSQL.Factory;
@@ -42,26 +43,37 @@ namespace DocumentAnalyzerAPI
             });
 
             // ------------------------------------------------------------------------/
+            // Configuration related to the DataHandlerAzure
+            // ------------------------------------------------------------------------/
+            DataHandlerAzureConfig.Config.FolderPath = Environment.GetEnvironmentVariable("DOCANALYZER_FOLDER_PATH");
+
+
+            // ------------------------------------------------------------------------/
             // Configuration related to the APIAuthLibrary & AuthLibrary
             // ------------------------------------------------------------------------/
-            AuthServiceConfig.Config.SecretKey = Configuration["TokenConfiguration:SecretKey"];
-            AuthServiceConfig.Config.IssuerToken = Configuration["TokenConfiguration:IssuerToken"];
-            AuthServiceConfig.Config.AuthType = Configuration["TokenConfiguration:AuthType"];
-            //AuthServiceConfig.Config.ExpirationTime = Int32.Parse(Configuration["TokenConfiguration:ExpirationTime"]);
+            AuthServiceConfig.Config.SecretKey = Environment.GetEnvironmentVariable("DOCANALYZER_TOKEN_SECRETKEY");
+            AuthServiceConfig.Config.IssuerToken = Environment.GetEnvironmentVariable("DOCANALYZER_TOKEN_ISSUERTOKEN");
+            AuthServiceConfig.Config.AuthType = Environment.GetEnvironmentVariable("DOCANALYZER_TOKEN_AUTHTYPE");
+
 
             services.AddAuthentication("Authorized")
                 .AddScheme<AuthenticationSchemeOptions, AuthHandler>("Authorized", "Authorized", opts => { });
 
             services.AddScoped<IAuthServiceFactory, AuthServiceFactory>();
-            // ------------------------------------------------------------------------/
+
                       
-             // ------------------------------------------------------------------------/
+            // ------------------------------------------------------------------------/
             // Configuration related to the DataHandlerSQL
             // ------------------------------------------------------------------------/
             string connStringPostgreSQL = Configuration["ConnectionStrings:PostgreSQL_DB"];
             DataHandlerSQLConfig.Config.ConnectionString = connStringPostgreSQL;
             services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
-            //------------------------------------------------------------------------/
+
+
+
+            // ------------------------------------------------------------------------/
+            // Configuration related to the DataHandlerMongoDB
+            // ------------------------------------------------------------------------/
             string connStringMongoDB = Configuration["ConnectionStrings:MongoDB"];
             DataHandlerMongoDBConfig.Config.ConnectionString = connStringMongoDB;
             DataHandlerMongoDBConfig.Config.DataBaseName = "DocAnalyzerEntities";

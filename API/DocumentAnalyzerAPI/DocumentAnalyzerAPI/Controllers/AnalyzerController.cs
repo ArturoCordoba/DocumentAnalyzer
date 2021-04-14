@@ -19,10 +19,13 @@ using DataHandlerSQL.Model;
 using DocumentASnalyzerAPI.Models;
 using System.Security.Claims;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace DocumentAnalyzerAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class AnalyzerController : Controller
     {
         private static IMongoRepository<FileMongo> mongo_repository;
@@ -41,7 +44,6 @@ namespace DocumentAnalyzerAPI.Controllers
              *                           "title": String}
              *                           
              */
-
             try
             {
                 ClaimsPrincipal claims = HttpContext.User;
@@ -60,7 +62,7 @@ namespace DocumentAnalyzerAPI.Controllers
             catch
             {
                 return BadRequest();
-            }     
+            }
         }
 
         
