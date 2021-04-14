@@ -17,6 +17,7 @@ using DataHandlerSQL.Factory;
 using DataHandlerSQL.Repository;
 using DataHandlerSQL.Model;
 using DocumentASnalyzerAPI.Models;
+using System.Security.Claims;
 
 namespace DocumentAnalyzerAPI.Controllers
 {
@@ -37,36 +38,54 @@ namespace DocumentAnalyzerAPI.Controllers
         public IActionResult NotifyDocument(NotificationData data)
         {
             /* Receives a JSON [body] = {"url":"https://soafiles.blob.core.windows.net/files/...",
-             *                           "title": String
-             *                           "owner": Integer}
+             *                           "title": String}
              *                           
-             * Owner: Integer (from header token)
              */
 
-            NLPService.NLPController.Instance.AddDocument(data.Url, data.Owner.ToString());
+            try
+            {
+                ClaimsPrincipal claims = HttpContext.User;
+                string owner = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            IUnitOfWork unit_of_work = uow_factory.Create();
+                NLPService.NLPController.Instance.AddDocument(data.Url, owner);
 
-            List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(data, mongo_repository, unit_of_work);
+                IUnitOfWork unit_of_work = uow_factory.Create();
 
-            EmployeeFinder.AddUserReferences(processingResults, unit_of_work);
+                List<Match> processingResults = EmployeeFinder.FindEmployeeReferences(data, int.Parse(owner), mongo_repository, unit_of_work);
 
-            return Ok();          
+                EmployeeFinder.AddUserReferences(processingResults, unit_of_work);
+
+                return Ok();
+            } 
+            catch
+            {
+                return BadRequest();
+            }     
         }
 
         
 
-        [HttpGet, Route("/documents/user={user_id}/")]
-        public IActionResult GetUserDocuments([FromRoute(Name = "user_id")] int id)
+        [HttpGet, Route("/documents")]
+        public IActionResult GetUserDocuments()
         {
-            IUnitOfWork unit_of_work = uow_factory.Create();
+            try
+            {
+                ClaimsPrincipal claims = HttpContext.User;
+                string owner = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            List<UserDocument> userFiles = EmployeeFinder.FindEmployeeDocuments(id, mongo_repository);
-            List<UserDocument> result = EmployeeFinder.GetDocumentReferences(userFiles, unit_of_work);
+                IUnitOfWork unit_of_work = uow_factory.Create();
 
-            /* Returns JSON [{"Title": String,"Status": Boolean, "Url": String,"UserDocumentReferences":[{"Name":String,"Qty":Integer},{"Name":String,"Qty":Integer}, ...]}]
-             */
-            return Ok(result);
+                List<UserDocument> userFiles = EmployeeFinder.FindEmployeeDocuments(int.Parse(owner), mongo_repository);
+                List<UserDocument> result = EmployeeFinder.GetDocumentReferences(userFiles, unit_of_work);
+
+                /* Returns JSON [{"Title": String,"Status": Boolean, "Url": String,"UserDocumentReferences":[{"Name":String,"Qty":Integer},{"Name":String,"Qty":Integer}, ...]}]
+                 */
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet, Route("/documents/users/count")]

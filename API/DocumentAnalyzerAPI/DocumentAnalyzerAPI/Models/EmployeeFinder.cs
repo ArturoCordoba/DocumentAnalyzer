@@ -14,15 +14,15 @@ namespace DocumentASnalyzerAPI.Models
 {
     public class EmployeeFinder
     {
-        public static List<Match> FindEmployeeReferences(NotificationData req,
+        public static List<Match> FindEmployeeReferences(NotificationData req, int owner,
                                                          IMongoRepository<FileMongo> repository,
                                                          IUnitOfWork unit_of_work)
         {
-            FileMongo userFile = repository.FilterBy(file => file.Title == req.Title && file.Owner == req.Owner).ToList().First();
+            FileMongo userFile = repository.FilterBy(file => file.Title == req.Title && file.Owner == owner).ToList().First();
 
             while(!userFile.Status)
             {
-                userFile = repository.FilterBy(file => file.Title == req.Title && file.Owner == req.Owner).ToList().First();
+                userFile = repository.FilterBy(file => file.Title == req.Title && file.Owner == owner).ToList().First();
             }
 
             IRepository<Employee> employeeRepo = unit_of_work.GetRepository<Employee>();
